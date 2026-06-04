@@ -60,12 +60,12 @@ export function SoundEffectBadge({
       onClick={handleInteract}
       animate={controls}
     >
-      {/* 20-Point Starburst Splash Shape */}
+      {/* Comic Speech Bubble Shape (removes star shape) */}
       <svg
         viewBox="0 0 100 100"
         className={`absolute inset-0 w-full h-full drop-shadow-md filter ${bgColors[color]} stroke-border-color stroke-[2px]`}
       >
-        <path d="M 50 10 L 58 28 L 78 22 L 72 40 L 90 45 L 75 56 L 85 75 L 67 70 L 68 90 L 50 80 L 32 90 L 33 70 L 15 75 L 25 56 L 10 45 L 28 40 L 22 22 L 42 28 Z" />
+        <path d="M 50 15 C 72 15, 90 28, 90 45 C 90 62, 72 75, 50 75 C 47 75, 44 75, 41 74.5 L 22 88 L 32 71 C 18 66, 10 56, 10 45 C 10 28, 28 15, 50 15 Z" />
       </svg>
 
       {/* Retro Comic Text */}

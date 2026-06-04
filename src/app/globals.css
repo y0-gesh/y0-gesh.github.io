@@ -1,43 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FBF9F5; /* Vintage Off-White Comic Paper */
-  --foreground: #0B0B0B; /* Thick Ink Black */
+  --background: #FCFAF6; /* Warm Manga Paper */
+  --foreground: #111112; /* Deep Ink Black */
   
-  --primary: #E23636; /* Marvel Red */
+  --primary: #E11D48; /* Vibrant Indie Comic Rose */
   --primary-foreground: #FFFFFF;
   
-  --secondary: #1F3A60; /* Classic Comic Blue */
+  --secondary: #3B2E58; /* Retro Manga Deep Purple/Plum */
   --secondary-foreground: #FFFFFF;
   
-  --accent: #F7D117; /* Retro Narrator Yellow */
-  --accent-foreground: #0B0B0B;
+  --accent: #FFB703; /* Amber Screentone Yellow */
+  --accent-foreground: #111112;
   
-  --muted: #EADEC9; /* Aged Paper */
-  --muted-foreground: #4B4946;
+  --muted: #F4EADA; /* Aged Newsprint */
+  --muted-foreground: #5C5B58;
   
   --panel-bg: #FFFFFF;
-  --comic-shadow: #000000;
-  --border-color: #000000;
+  --comic-shadow: #111112;
+  --border-color: #111112;
 }
 
 .dark {
-  --background: #111113; /* Cosmic Noir / Dark Graphite */
-  --foreground: #F5F5F7; /* Off-White Silver */
+  --background: #0C0C0E; /* Cosmic Midnight Noir */
+  --foreground: #ECECED; /* Manga Silver Paper */
   
-  --primary: #FF3D3D; /* Radiant Electric Red */
+  --primary: #FF4B72; /* Neon Cherry Manga */
   --primary-foreground: #FFFFFF;
   
-  --secondary: #0099FF; /* Neon Electric Blue */
-  --secondary-foreground: #111113;
+  --secondary: #6366F1; /* Cyber Screentone Indigo */
+  --secondary-foreground: #FFFFFF;
   
-  --accent: #FFDF00; /* Bright Neon Yellow */
-  --accent-foreground: #111113;
+  --accent: #FF9F1C; /* Neon Comic Tangerine */
+  --accent-foreground: #0C0C0E;
   
-  --muted: #1E1E22; /* Darkened Slate */
+  --muted: #1A1A1E; /* Midnight Screen Shade */
   --muted-foreground: #8C8C9A;
   
-  --panel-bg: #1B1B1F;
+  --panel-bg: #141416;
   --comic-shadow: #FFFFFF;
   --border-color: #FFFFFF;
 }
