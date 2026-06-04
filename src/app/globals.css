@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FBF9F5; /* Vintage Off-White Comic Paper */
+  --foreground: #0B0B0B; /* Thick Ink Black */
+  
+  --primary: #E23636; /* Marvel Red */
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #1F3A60; /* Classic Comic Blue */
+  --secondary-foreground: #FFFFFF;
+  
+  --accent: #F7D117; /* Retro Narrator Yellow */
+  --accent-foreground: #0B0B0B;
+  
+  --muted: #EADEC9; /* Aged Paper */
+  --muted-foreground: #4B4946;
+  
+  --panel-bg: #FFFFFF;
+  --comic-shadow: #000000;
+  --border-color: #000000;
+}
+
+.dark {
+  --background: #111113; /* Cosmic Noir / Dark Graphite */
+  --foreground: #F5F5F7; /* Off-White Silver */
+  
+  --primary: #FF3D3D; /* Radiant Electric Red */
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #0099FF; /* Neon Electric Blue */
+  --secondary-foreground: #111113;
+  
+  --accent: #FFDF00; /* Bright Neon Yellow */
+  --accent-foreground: #111113;
+  
+  --muted: #1E1E22; /* Darkened Slate */
+  --muted-foreground: #8C8C9A;
+  
+  --panel-bg: #1B1B1F;
+  --comic-shadow: #FFFFFF;
+  --border-color: #FFFFFF;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-panel-bg: var(--panel-bg);
+  --color-border-color: var(--border-color);
+  
+  --font-sans: var(--font-inter), sans-serif;
+  --font-comic-header: var(--font-bangers), cursive;
+  --font-comic-title: var(--font-bebas-neue), sans-serif;
+  
+  --shadow-comic: 6px 6px 0px 0px var(--comic-shadow);
+  --shadow-comic-md: 4px 4px 0px 0px var(--comic-shadow);
+  --shadow-comic-lg: 10px 10px 0px 0px var(--comic-shadow);
+  
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-wiggle: wiggle 0.3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
+
+/* Global resets and layouts */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Paper Texture and Overlay effects */
+.paper-texture {
+  position: relative;
+}
+
+.paper-texture::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0%200%20200%20200'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter%20id='noiseFilter'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.8'%20numOctaves='3'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23noiseFilter)'%20opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Halftone print dots styling */
+.bg-halftone {
+  position: relative;
+}
+
+.bg-halftone::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(var(--foreground) 1px, transparent 1px);
+  background-size: 16px 16px;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dark .bg-halftone::after {
+  opacity: 0.05;
+}
+
+/* Scroll-driven animations progress bar (LCP/UX responsive) */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: scroll())) {
+    @keyframes grow-progress {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    #reading-progress {
+      transform-origin: 0 50%;
+      animation: grow-progress auto linear;
+      animation-timeline: scroll();
+    }
+  }
+}
+
+/* Text outline effects for big display sections */
+.text-stroke-black {
+  -webkit-text-stroke: 1.5px #000000;
+  text-shadow: 2px 2px 0px #000000;
+}
+
+.dark .text-stroke-black {
+  -webkit-text-stroke: 1.5px #ffffff;
+  text-shadow: 2px 2px 0px #ffffff;
+}
+
+/* Custom scrollbars mimicking comic boundaries */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-left: 3px solid var(--border-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border: 3px solid var(--border-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
