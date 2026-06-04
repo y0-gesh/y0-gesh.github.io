@@ -35,7 +35,7 @@ export default function AboutPage() {
           </div>
 
           {/* Chronological Origin Sections */}
-          <div className="flex flex-col gap-12 mb-16">
+          <div className="flex flex-col gap-16 mb-16">
             
             {/* 1. CURRENTLY WORKING */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
@@ -48,11 +48,11 @@ export default function AboutPage() {
                   <div className="absolute top-3 left-4 bg-primary text-white border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase tracking-wider">
                     Status: Currently Active
                   </div>
-                  <h3 className="font-comic-header text-2xl uppercase mt-4 mb-2 text-secondary">
+                  <h3 className="font-comic-header text-2xl uppercase mt-8 mb-2 text-secondary">
                     Currently Deployed
                   </h3>
                   <p className="text-xs md:text-sm font-semibold text-muted-foreground leading-relaxed">
-                    Yogesh is currently operating as a **Full Stack & Web Developer**, specializing in React, Next.js, and visual graph architectures. He is actively designing and deploying visual system solutions, visual node editors (like **think-canvas**), and hyper-local marketplace engines (like **ENM**).
+                    Yogesh is currently operating as a <strong>Full Stack & Web Developer</strong>, specializing in React, Next.js, and visual graph architectures. He is actively designing and deploying visual system solutions, visual node editors (like <strong>think-canvas</strong>), and hyper-local marketplace engines (like <strong>ENM</strong>).
                   </p>
                 </ComicPanel>
               </div>
@@ -65,7 +65,7 @@ export default function AboutPage() {
                   <div className="absolute top-3 left-4 bg-secondary text-white border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase tracking-wider">
                     Mission Log: Experience
                   </div>
-                  <h3 className="font-comic-header text-2xl uppercase mt-4 mb-3 text-primary">
+                  <h3 className="font-comic-header text-2xl uppercase mt-8 mb-3 text-primary">
                     Professional Operations
                   </h3>
                   
@@ -109,11 +109,11 @@ export default function AboutPage() {
                   <div className="absolute top-3 left-4 bg-accent text-accent-foreground border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase tracking-wider">
                     Academy: Education
                   </div>
-                  <h3 className="font-comic-header text-2xl uppercase mt-4 mb-2 text-secondary">
+                  <h3 className="font-comic-header text-2xl uppercase mt-8 mb-2 text-secondary">
                     College Training
                   </h3>
                   <p className="text-xs md:text-sm font-semibold text-muted-foreground leading-relaxed">
-                    Our hero holds a **Bachelor of Technology (B.Tech) in Computer Science & Engineering** from **Government Engineering College, Raipur** (Batch of 2021 - 2025).
+                    Our hero holds a <strong>Bachelor of Technology (B.Tech) in Computer Science & Engineering</strong> from <strong>Government Engineering College, Raipur</strong> (Batch of 2021 - 2025).
                   </p>
                   <p className="text-xs font-bold text-muted-foreground mt-2 leading-relaxed">
                     Rigorous courses completed in Data Structures, Algorithm Design, Operating Systems, Database Management Systems, and Object-Oriented Architectures.

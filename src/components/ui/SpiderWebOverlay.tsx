@@ -26,7 +26,15 @@ export function SpiderWebOverlay() {
       initial={{ opacity: 1 }}
       animate={isDropped ? { opacity: 0 } : { opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden paper-texture bg-background bg-halftone ${
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 999999,
+      }}
+      className={`flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden paper-texture bg-halftone  bg-white/10 backdrop-blur-xl ${
         isDropped ? 'pointer-events-none' : ''
       }`}
       onClick={() => {
