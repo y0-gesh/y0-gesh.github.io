@@ -125,43 +125,29 @@ export default function AboutPage() {
           </div>
 
           {/* Capabilities Grid */}
-          {/* <div className="mb-12">
+          <div className="mb-12">
             <div className="text-center mb-8">
               <h2 className="font-comic-header text-4xl uppercase text-foreground">
                 Capability Power Grid
               </h2>
               <p className="text-xs font-bold text-muted-foreground">
-                CLASSIFIED TECHNICAL RATINGS (SCALE 1 - 7)
+                CLASSIFIED TECHNICAL DOSSIERS & KEY CAPABILITIES
               </p>
             </div>
 
             <ComicPanel skewAngle="none" className="bg-panel-bg p-8 border-3">
               <div className="flex flex-col gap-6">
                 {powerGrid.map((row) => (
-                  <div key={row.skill} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                  <div key={row.skill} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center border-b border-border-color/10 pb-4 last:border-b-0 last:pb-0">
                     
                     <div className="md:col-span-4">
-                      <span className="font-comic-title text-lg uppercase tracking-wider text-foreground">
+                      <span className="font-comic-title text-lg uppercase tracking-wider text-primary">
                         {row.skill}
                       </span>
                     </div>
 
-                    <div className="md:col-span-4 flex items-center gap-1 bg-muted p-1 border-2 border-border-color">
-                      {Array.from({ length: 7 }).map((_, i) => {
-                        const filled = i < row.score;
-                        return (
-                          <div
-                            key={i}
-                            className={`h-6 flex-grow border border-border-color transition-colors duration-300 ${
-                              filled ? 'bg-primary' : 'bg-transparent'
-                            }`}
-                          ></div>
-                        );
-                      })}
-                    </div>
-
-                    <div className="md:col-span-4">
-                      <span className="text-[11px] font-bold text-muted-foreground leading-snug block">
+                    <div className="md:col-span-8">
+                      <span className="text-sm font-semibold text-muted-foreground leading-snug block">
                         {row.desc}
                       </span>
                     </div>
@@ -170,7 +156,7 @@ export default function AboutPage() {
                 ))}
               </div>
             </ComicPanel>
-          </div> */}
+          </div>
 
           {/* Footer Call to Action */}
           <div className="text-center pt-8">

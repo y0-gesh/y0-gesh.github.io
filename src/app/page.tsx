@@ -10,6 +10,7 @@ import { getAllProjects, getAllBlogPosts } from '@/lib/content';
 import { ArrowRight, Mail, Terminal, Cpu } from 'lucide-react';
 import { HeroThreeCanvas } from '@/components/three/HeroThreeCanvas';
 import { ContactForm } from '@/components/sections/ContactForm';
+import { SpiderWebOverlay } from '@/components/ui/SpiderWebOverlay';
 
 export default function HomePage() {
   const projects = getAllProjects().slice(0, 3); // Get top 3 projects
@@ -17,6 +18,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <SpiderWebOverlay />
       <Header />
 
       <main className="flex-grow">
@@ -142,9 +144,22 @@ export default function HomePage() {
                 >
                   <div className="relative aspect-video w-full border-2 border-border-color mb-4 bg-muted flex items-center justify-center overflow-hidden">
                     <div className="absolute inset-0 bg-halftone"></div>
-                    <span className="font-comic-title text-xl text-muted-foreground z-10">
-                      {proj.title} Screen
-                    </span>
+                    {/* Render actual Marvel/comic illustration if available */}
+                    {proj.slug === 'think-canvas' && (
+                      <img src="/images/think-canvas.png" alt={proj.title} className="absolute inset-0 w-full h-full object-cover" />
+                    )}
+                    {proj.slug === 'node-editor-flow' && (
+                      <img src="/images/node-flow.png" alt={proj.title} className="absolute inset-0 w-full h-full object-cover" />
+                    )}
+                    {proj.slug === 'devops-cicd-journey' && (
+                      <img src="/images/devops-journey.png" alt={proj.title} className="absolute inset-0 w-full h-full object-cover" />
+                    )}
+                    {/* Fallback if not one of these slugs */}
+                    {!['think-canvas', 'node-editor-flow', 'devops-cicd-journey'].includes(proj.slug) && (
+                      <span className="font-comic-title text-xl text-muted-foreground z-10">
+                        {proj.title} Screen
+                      </span>
+                    )}
                   </div>
                   <div className="absolute top-4 left-4 bg-primary text-white border-2 border-border-color px-2 py-0.5 text-xs font-comic-title uppercase">
                     Mission {idx + 1}
