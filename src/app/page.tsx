@@ -40,7 +40,7 @@ export default function HomePage() {
 
               {/* Narrator block */}
               <NarratorBox title="THE STORY BEGINS..." className="w-full">
-                “A full-stack web engineer from Raipur, building visual react canvases, node graph editors, and microservice marketplaces. An alumnus of Government Engineering College, Raipur...”
+                “A full-stack web engineer from Raipur, building visual react canvases, node graph editors, and microservice marketplaces. Operating under the ultimate directive: 'With great power comes great clean code.'...”
               </NarratorBox>
 
               {/* Sub-capabilities list */}
@@ -52,7 +52,7 @@ export default function HomePage() {
                   <Cpu size={14} className="text-secondary" /> Node Editor Developer
                 </span>
                 <span className="flex items-center gap-1.5 px-3 py-1 border-2 border-border-color bg-panel-bg font-semibold text-xs uppercase shadow-comic-md">
-                  <span className="text-accent">★</span> React Flow Specialist
+                  <span className="text-accent">🕸️</span> React Flow Specialist
                 </span>
               </div>
 
@@ -77,7 +77,7 @@ export default function HomePage() {
               <div className="w-full max-w-[400px] border-4 border-border-color bg-panel-bg shadow-comic p-4 relative transform rotate-1">
                 {/* Yellow caption title */}
                 <div className="absolute -top-3 left-4 bg-accent text-accent-foreground border-2 border-border-color px-2 py-0.5 text-xs font-comic-title uppercase">
-                  Interactive Comic No. 1
+                  Amazing Fantasy #15
                 </div>
                 <HeroThreeCanvas />
               </div>
@@ -123,7 +123,7 @@ export default function HomePage() {
             
             <div className="flex justify-between items-end mb-12">
               <h2 className="font-comic-header text-5xl uppercase tracking-wider text-primary">
-                Featured Missions
+                S.H.I.E.L.D. Mission Archive
               </h2>
               <Link href="/projects" className="hidden sm:block">
                 <ComicButton variant="outline" size="sm">

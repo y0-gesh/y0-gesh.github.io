@@ -172,3 +172,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     </div>
   );
 }
+
+export function generateStaticParams() {
+  const projects = getAllProjects();
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
+}

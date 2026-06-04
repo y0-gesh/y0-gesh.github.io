@@ -167,3 +167,10 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     </div>
   );
 }
+
+export function generateStaticParams() {
+  const posts = getAllBlogPosts();
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}

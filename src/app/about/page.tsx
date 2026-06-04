@@ -125,7 +125,7 @@ export default function AboutPage() {
           </div>
 
           {/* Capabilities Grid */}
-          <div className="mb-12">
+          {/* <div className="mb-12">
             <div className="text-center mb-8">
               <h2 className="font-comic-header text-4xl uppercase text-foreground">
                 Capability Power Grid
@@ -170,7 +170,7 @@ export default function AboutPage() {
                 ))}
               </div>
             </ComicPanel>
-          </div>
+          </div> */}
 
           {/* Footer Call to Action */}
           <div className="text-center pt-8">
