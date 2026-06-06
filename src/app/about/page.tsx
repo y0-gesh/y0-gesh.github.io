@@ -21,7 +21,7 @@ export default function AboutPage() {
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
 
-      <main className="flex-grow py-12 bg-halftone">
+      <main className="grow py-12 bg-halftone">
         <div className="max-w-4xl mx-auto px-4 md:px-8">
           
           {/* Page Masthead */}
@@ -170,7 +170,7 @@ export default function AboutPage() {
                   Explore Projects Database
                 </ComicButton>
               </Link>
-              <Link href="/">
+              <Link href="/#message-section">
                 <ComicButton variant="outline" size="lg">
                   Send Directive Message
                 </ComicButton>

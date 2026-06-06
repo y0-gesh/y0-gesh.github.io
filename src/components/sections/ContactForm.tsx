@@ -1,26 +1,70 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { ComicPanel } from '@/components/ui/ComicPanel';
-import { ComicButton } from '@/components/ui/ComicButton';
+import React, { useState } from "react";
+import { ComicPanel } from "@/components/ui/ComicPanel";
+import { ComicButton } from "@/components/ui/ComicButton";
 
 export function ContactForm() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!name || !email || !message) return;
-    
-    // Simulate comic splash success state
-    setSubmitted(true);
+
+    setLoading(true);
+
+    try {
+      const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: accessKey,
+          subject: `Portfolio Contact - ${name}`,
+          name,
+          email,
+          replyto: email,
+          message,
+          from_name: "Yogesh Tandan Portfolio",
+          website: window.location.href,
+          botcheck: "",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitted(true);
+
+        setName("");
+        setEmail("");
+        setMessage("");
+      } else {
+        // console.error(result);
+        alert("Failed to send message.");
+      }
+    } catch (error) {
+      // console.error(error);
+      alert("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
     return (
-      <ComicPanel skewAngle="none" className="p-8 text-center bg-accent text-accent-foreground border-3 shadow-comic-lg">
+      <ComicPanel
+        skewAngle="none"
+        className="p-8 text-center bg-accent text-accent-foreground border-3 shadow-comic-lg"
+      >
         <h3 className="font-comic-header text-5xl uppercase tracking-wider mb-2 animate-wiggle select-none text-stroke-black">
           KABOOM!
         </h3>
@@ -28,15 +72,16 @@ export function ContactForm() {
           Message Dispatched Successfully!
         </p>
         <p className="font-semibold text-sm leading-relaxed max-w-md mx-auto mb-6">
-          Your transmission has been routed to Yogesh's communications terminal. Expect coordinates and follow-up data feeds shortly.
+          Your transmission has been routed to Yogesh&apos;s communications
+          terminal. Expect coordinates and follow-up data feeds shortly.
         </p>
         <ComicButton
           variant="primary"
           size="sm"
           onClick={() => {
-            setName('');
-            setEmail('');
-            setMessage('');
+            setName("");
+            setEmail("");
+            setMessage("");
             setSubmitted(false);
           }}
         >
@@ -51,7 +96,10 @@ export function ContactForm() {
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col gap-2">
-            <label className="font-comic-title text-sm uppercase tracking-wider text-muted-foreground" htmlFor="name">
+            <label
+              className="font-comic-title text-sm uppercase tracking-wider text-muted-foreground"
+              htmlFor="name"
+            >
               Agent Name
             </label>
             <input
@@ -64,9 +112,12 @@ export function ContactForm() {
               required
             />
           </div>
-          
+
           <div className="flex flex-col gap-2">
-            <label className="font-comic-title text-sm uppercase tracking-wider text-muted-foreground" htmlFor="email">
+            <label
+              className="font-comic-title text-sm uppercase tracking-wider text-muted-foreground"
+              htmlFor="email"
+            >
               Agent Email
             </label>
             <input
@@ -82,7 +133,10 @@ export function ContactForm() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="font-comic-title text-sm uppercase tracking-wider text-muted-foreground" htmlFor="message">
+          <label
+            className="font-comic-title text-sm uppercase tracking-wider text-muted-foreground"
+            htmlFor="message"
+          >
             Directive / Mission Details
           </label>
           <textarea
@@ -97,8 +151,14 @@ export function ContactForm() {
         </div>
 
         <div className="flex justify-center mt-2">
-          <ComicButton variant="primary" size="lg" type="submit" className="w-full sm:w-auto">
-            LAUNCH DIRECTIVE!
+          <ComicButton
+            variant="primary"
+            size="lg"
+            type="submit"
+            className="w-full sm:w-auto"
+            disabled={loading}
+          >
+            {loading ? "TRANSMITTING..." : "LAUNCH DIRECTIVE!"}
           </ComicButton>
         </div>
       </form>

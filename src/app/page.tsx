@@ -21,7 +21,7 @@ export default function HomePage() {
       <SpiderWebOverlay />
       <Header />
 
-      <main className="flex-grow">
+      <main className="grow">
         {/* HERO SECTION */}
         <section className="relative py-12 md:py-24 border-b-4 border-border-color bg-halftone overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
@@ -42,7 +42,7 @@ export default function HomePage() {
 
               {/* Narrator block */}
               <NarratorBox title="THE STORY BEGINS..." className="w-full">
-                “A full-stack web engineer from Raipur, building visual react canvases, node graph editors, and microservice marketplaces. Operating under the ultimate directive: 'With great power comes great clean code.'...”
+                “A full-stack web engineer from Raipur, building visual react canvases, node graph editors, and microservice marketplaces. Operating under the ultimate directive: &apos;With great power comes great clean code.&apos;...”
               </NarratorBox>
 
               {/* Sub-capabilities list */}
@@ -233,7 +233,7 @@ export default function HomePage() {
         </section>
 
         {/* CONTACT SECTION */}
-        <section className="py-20 bg-background relative overflow-hidden">
+        <section className="py-20 bg-background relative overflow-hidden" id='message-section'>
           <div className="max-w-3xl mx-auto px-4 relative z-10">
             <div className="text-center mb-12">
               <h2 className="font-comic-header text-5xl uppercase text-primary mb-2 text-stroke-black">
