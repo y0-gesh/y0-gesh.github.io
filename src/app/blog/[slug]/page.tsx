@@ -34,13 +34,13 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
       {/* Scroll Reading Progress Bar - fixed right below header or at very top */}
       <div
         id="reading-progress"
-        className="fixed top-0 left-0 h-1.5 bg-primary z-[999] w-full transform scale-x-0 origin-left"
+        className="fixed top-0 left-0 h-1.5 bg-primary z-999 w-full transform scale-x-0 origin-left"
         aria-hidden="true"
       ></div>
 
       <Header />
       <CodeBlockCopy />
-      <main className="flex-grow py-12 bg-halftone">
+      <main className="grow py-12 bg-halftone">
         <div className="max-w-5xl mx-auto px-4 md:px-8">
           {/* Back button */}
           <div className="mb-8">
