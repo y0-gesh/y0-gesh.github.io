@@ -60,8 +60,21 @@ export function Header() {
           })}
         </nav>
 
-        {/* Action Controls (Theme Toggle & Mobile Burger) */}
-        <div className="flex items-center gap-3 pl-4">
+        {/* Action Controls (Resume Button, Theme Toggle & Mobile Burger) */}
+        <div className="flex items-center gap-2 pl-4">
+          <a
+            href="/resume/yogesh.pdf"
+            target="_blank"
+            download="Yogesh_Tandan_Resume.pdf"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-border-color bg-accent text-accent-foreground font-comic-title text-xs uppercase tracking-wider shadow-comic-md hover:bg-yellow-400 cursor-pointer transition-transform active:scale-95 select-none"
+            title="Download Resume PDF"
+          >
+            <svg className="w-3.5 h-3.5 fill-current stroke-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            <span>Resume</span>
+          </a>
+
           {mounted && (
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -109,6 +122,18 @@ export function Header() {
                   </Link>
                 );
               })}
+              <a
+                href="/resume/yogesh.pdf"
+                target="_blank"
+                download="Yogesh_Tandan_Resume.pdf"
+                onClick={() => setIsOpen(false)}
+                className="px-4 py-3 border-2 border-border-color bg-accent text-accent-foreground font-comic-title text-lg tracking-wider uppercase shadow-comic-md flex items-center justify-between"
+              >
+                <span>Download Resume (PDF)</span>
+                <svg className="w-5 h-5 fill-current stroke-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+              </a>
             </nav>
           </motion.div>
         )}
