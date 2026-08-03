@@ -58,19 +58,23 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
             
             {/* Left Column: Markdown content */}
             <div className="lg:col-span-8 flex flex-col gap-6">
-              <ComicPanel skewAngle="none" className="bg-panel-bg p-8">
+              <ComicPanel skewAngle="none" className="bg-panel-bg p-6 md:p-8">
                 {/* HTML content rendered from Markdown */}
                 <div 
                   className="
                     font-sans text-sm md:text-base leading-relaxed font-semibold text-foreground
                     space-y-6
-                    [&>h2]:font-comic-header [&>h2]:text-3xl [&>h2]:uppercase [&>h2]:text-secondary [&>h2]:mt-6 [&>h2]:mb-2
-                    [&>h3]:font-comic-title [&>h3]:text-xl [&>h3]:uppercase [&>h3]:text-foreground [&>h3]:mt-4 [&>h3]:mb-1
-                    [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1.5
-                    [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1.5
-                    [&>pre]:border-2 [&>pre]:border-border-color [&>pre]:bg-muted [&>pre]:p-4 [&>pre]:overflow-x-auto [&>pre]:shadow-comic-md
+                    [&>h2]:font-comic-header [&>h2]:text-3xl [&>h2]:uppercase [&>h2]:text-secondary [&>h2]:mt-8 [&>h2]:mb-3 [&>h2]:border-b-2 [&>h2]:border-border-color [&>h2]:pb-1
+                    [&>h3]:font-comic-title [&>h3]:text-xl [&>h3]:uppercase [&>h3]:text-primary [&>h3]:mt-6 [&>h3]:mb-2
+                    [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-2
+                    [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-2
+                    [&>hr]:border-t-2 [&>hr]:border-border-color [&>hr]:my-6
+                    [&>pre]:border-3 [&>pre]:border-border-color [&>pre]:bg-background [&>pre]:p-4 [&>pre]:overflow-x-auto [&>pre]:shadow-comic-md [&>pre]:font-mono [&>pre]:text-xs [&>pre]:leading-snug
                     [&>code]:font-mono [&>code]:text-xs [&>code]:bg-muted [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:border [&>code]:border-border-color
-                    [&>pre>code]:border-none [&>pre>code]:p-0
+                    [&>pre>code]:border-none [&>pre>code]:p-0 [&>pre>code]:bg-transparent
+                    [&>table]:w-full [&>table]:border-2 [&>table]:border-border-color [&>table]:my-4
+                    [&>th]:border [&>th]:border-border-color [&>th]:bg-muted [&>th]:p-2 [&>th]:font-comic-title [&>th]:text-xs [&>th]:uppercase
+                    [&>td]:border [&>td]:border-border-color [&>td]:p-2 [&>td]:text-xs
                   "
                   dangerouslySetInnerHTML={{ __html: project.contentHtml }}
                 />
@@ -104,6 +108,13 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
                   {/* Actions buttons */}
                   <div className="flex flex-col gap-3 mt-4 pt-4 border-t-2 border-border-color">
+                    <a href="/resume/yogesh.pdf" target="_blank" download="Yogesh_Tandan_Resume.pdf">
+                      <ComicButton variant="accent" size="sm" className="w-full gap-1.5">
+                        <svg className="w-3.5 h-3.5 fill-current stroke-current inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg> Download Resume PDF
+                      </ComicButton>
+                    </a>
                     {project.liveUrl && (
                       <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                         <ComicButton variant="primary" size="sm" className="w-full">

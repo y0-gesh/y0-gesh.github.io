@@ -105,7 +105,7 @@ export function ContactForm() {
             <input
               id="name"
               type="text"
-              placeholder="E.G. T'CHALLA"
+              placeholder="E.G. TONY STARK"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="border-3 border-border-color p-3 bg-background focus:outline-none focus:bg-accent font-semibold placeholder-muted-foreground/60 shadow-comic-md text-foreground"

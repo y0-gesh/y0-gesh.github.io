@@ -1,23 +1,58 @@
 ---
-title: "ThinkCanvas Node Editor"
-description: "A graph-first node visual editor designed for structured thinking, visual workflows, and extensible system architectures."
-date: "2026-05-20"
-tags: ["React", "TypeScript", "React Flow", "Zustand"]
+title: "Interactive Flow & Visualization System"
+description: "Node-based UI system built with React Flow, customized node rendering, animations, grouping, and Attio-inspired motion behavior."
+date: "2025-08-10"
+tags: ["React", "TypeScript", "React Flow", "Two.js", "Zustand", "Motion"]
 coverImage: "/images/projects/think-canvas.jpg"
 featured: true
 githubUrl: "https://github.com/y0-gesh/think-canvas"
 liveUrl: ""
 ---
 
-## The Concept
+## Overview & Objective
 
-Modern diagramming tools are either overly freeform (like Figma Jam) or too rigid. **ThinkCanvas** strikes a perfect balance. It is a graph-first node editor engineered for structured system thinking, visual mind-mapping, and programmatic state routing.
+Engineered an interactive graph-first node visual editor designed for structured thinking, visual workflows, and extensible system architectures. Inspired by Attio UI motion physics and modular node graphs.
 
-Built with React Flow and Zustand, it provides fluid 60fps graph manipulations and node-to-node data relays.
+---
 
-### Features
+## 🎯 The Problem
 
-* **Node Data Relay**: Dynamic ports allowing nodes to output results that flow down connecting paths to adjacent nodes.
-* **Extensible Node Schemes**: Easily add custom Markdown nodes, image cells, or API execution triggers.
-* **Zustand Graph State**: Keeps visual layout coordinates and underlying connection lists perfectly in sync, allowing easy export to JSON.
-* **Infinite Pan & Zoom**: High performance rendering that handles hundreds of nodes with sub-millisecond redraw latency.
+- **Rigid Diagram Editors**: Traditional flowchart tools lack custom node extensibility and dynamic data propagation between connected nodes.
+- **Performance Drops at Scale**: Rendering dozens of custom node components on an interactive canvas often results in stutter during pan and zoom.
+
+---
+
+## 🛠️ Key Contributions & Features
+
+- **React Flow Custom Nodes**: Designed custom node definitions with dynamic input/output ports, inline Markdown editing, and state relays.
+- **Attio-Inspired Motion**: Implemented smooth hover states, magnetic node snapping, and fluid animation curves.
+- **Zustand Graph State**: Synchronized canvas layout positions, edge connections, and node data payloads in a centralized Zustand store.
+- **60 FPS Canvas Performance**: Optimized node rendering with memoization and custom viewport culling.
+
+---
+
+## 📐 Architecture Diagram
+
+```
++-------------------------------------------------------------------+
+|                        Interactive Flow UI                        |
+|                                                                   |
+|   +-----------------------+           +-----------------------+   |
+|   |  React Flow Viewport  | <=======> |  Attio Motion & Canvas|   |
+|   |  (Custom Nodes/Edges) |           |  Snapping Engine      |   |
+|   +-----------+-----------+           +-----------+-----------+   |
+|               |                                   |               |
+|               v                                   v               |
+|   +-----------------------------------------------------------+   |
+|   |                 Zustand Graph State Store                 |   |
+|   |   Nodes Array | Edges Array | Port Data Relays | Undo/Redo|   |
+|   +-----------------------------------------------------------+   |
++-------------------------------------------------------------------+
+```
+
+---
+
+## 📈 Outcome & Key Metrics
+
+- **Fluid 60 FPS Performance**: Seamless pan/zoom across hundreds of active nodes and edges.
+- **Zero-Latency State Sync**: Sub-millisecond data relay between connected graph ports.

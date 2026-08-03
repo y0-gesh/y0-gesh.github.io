@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Bangers, Bebas_Neue, Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
-import "./globals.css";
+import { WebShooterListener } from "@/components/ui/WebShooterListener";
+import "@/styles/globals.css";
 
 const bangers = Bangers({
   weight: "400",
@@ -48,6 +49,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col paper-texture bg-background text-foreground transition-colors duration-300">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <WebShooterListener />
           {children}
         </ThemeProvider>
       </body>

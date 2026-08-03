@@ -57,8 +57,20 @@ export function Footer() {
           </p>
         </div>
 
-        {/* Social buttons */}
-        <div className="flex items-center gap-4">
+        {/* Social buttons & Resume */}
+        <div className="flex flex-wrap items-center gap-4">
+          <a
+            href="/resume/yogesh.pdf"
+            target="_blank"
+            download="Yogesh_Tandan_Resume.pdf"
+            className="flex items-center gap-2 px-3 py-2 border-2 border-border-color bg-accent text-accent-foreground font-comic-title text-xs uppercase tracking-wider shadow-comic-md hover:bg-yellow-400 cursor-pointer select-none"
+          >
+            <svg className="w-4 h-4 fill-current stroke-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            Download Resume
+          </a>
+
           {socials.map((social) => (
             <motion.a
               key={social.label}
