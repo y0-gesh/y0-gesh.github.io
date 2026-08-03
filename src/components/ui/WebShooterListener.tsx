@@ -109,7 +109,7 @@ export function WebShooterListener() {
                 />
 
                 {/* Secondary branching web tendril for extra web shooter realism */}
-                <motion.path
+                {/* <motion.path
                   d={`M ${shot.originX} ${shot.originY} Q ${controlX - 15} ${controlY + 20} ${shot.targetX - 10} ${shot.targetY + 10}`}
                   fill="none"
                   stroke="#ffffff"
@@ -122,7 +122,7 @@ export function WebShooterListener() {
                     pathLength: { duration: 0.22, ease: 'easeOut', delay: 0.03 },
                     opacity: { duration: 1.5, times: [0, 0.1, 0.75, 1] },
                   }}
-                />
+                /> */}
               </g>
             );
           })}
