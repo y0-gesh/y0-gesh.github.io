@@ -9,36 +9,31 @@ import Link from 'next/link';
 import { Download, Server, Cpu, Layers, ShieldCheck, Terminal, ArrowRight, ExternalLink } from 'lucide-react';
 
 export default function AboutPage() {
-  // Marvel Power Grid Capability Scores & Facts
+  // Marvel Power Grid Capability Facts
   const powerGrid = [
     { 
       category: 'Cloud & Infrastructure',
       skill: 'AWS & Terraform Automation', 
-      score: '6 / 7', 
       desc: 'Provisioning AWS ECS, Fargate, VPCs, API Gateway, WAF & DynamoDB with Terraform IaC. Configured OIDC GitHub-to-AWS authentication (zero static keys).' 
     },
     { 
       category: 'Frontend & SaaS Architecture',
       skill: 'Next.js, React & Multi-Tenant SaaS', 
-      score: '6 / 7', 
       desc: 'Building multi-tenant SaaS frontend modules, Figma-aligned Cognito MFA auth flows, incident management screens, and reusable UI components.' 
     },
     { 
       category: 'Interactive Visualizations',
       skill: 'React Flow, Two.js & Recharts', 
-      score: '6 / 7', 
       desc: 'Node graph editors, visual workflow state relays, Attio-inspired motion physics, and domain-specific 2D/SVG data analytics.' 
     },
     { 
       category: 'Desktop & Computational Apps',
       skill: 'Electron.js & Performance Optimization', 
-      score: '5 / 7', 
       desc: 'Optimized 3D rendering engine for computational engineering tools, delivering a ~60% performance improvement in rendering FPS.' 
     },
     { 
       category: 'APIs & Backend Integration',
       skill: 'REST APIs & Schema Analysis', 
-      score: '5 / 7', 
       desc: 'Reverse-engineering backend User Service APIs, inspecting Postman collections, and enforcing type-safe client contracts.' 
     },
   ];
@@ -298,15 +293,9 @@ export default function AboutPage() {
                       </span>
                     </div>
 
-                    <div className="md:col-span-5">
+                    <div className="md:col-span-7">
                       <span className="text-xs md:text-sm font-semibold text-muted-foreground leading-snug block">
                         {row.desc}
-                      </span>
-                    </div>
-
-                    <div className="md:col-span-2 text-right">
-                      <span className="inline-block px-3 py-1 bg-accent text-accent-foreground border-2 border-border-color font-comic-header text-sm tracking-wider shadow-comic-md">
-                        {row.score}
                       </span>
                     </div>
 
