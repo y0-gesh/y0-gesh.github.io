@@ -39,7 +39,7 @@ export function WebShooterListener() {
         originX,
         originY,
         rotation: Math.floor(Math.random() * 360),
-        scale: 0.9 + Math.random() * 0.3,
+        scale: 0.65 + Math.random() * 0.2,
         badge: SOUND_EFFECTS[Math.floor(Math.random() * SOUND_EFFECTS.length)],
       };
 
@@ -58,7 +58,7 @@ export function WebShooterListener() {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[999999] overflow-hidden select-none">
+    <div className="fixed inset-0 pointer-events-none z-999999 overflow-hidden select-none">
       {/* Fullscreen SVG for drawing the web strand lines from bottom wrist to target */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none">
         <defs>
@@ -150,7 +150,7 @@ export function WebShooterListener() {
                 times: [0, 0.12, 0.8, 1],
                 ease: ['easeOut', 'easeOut', 'easeIn'],
               }}
-              className="w-44 h-44 relative flex items-center justify-center"
+              className="w-28 h-28 sm:w-32 sm:h-32 relative flex items-center justify-center"
             >
               <svg
                 viewBox="0 0 160 160"
@@ -192,12 +192,12 @@ export function WebShooterListener() {
 
             {/* Spider-Man Comic "THWIP!" Badge */}
             <motion.div
-              initial={{ scale: 0, opacity: 0, x: 20, y: -20, rotate: -15 }}
+              initial={{ scale: 0, opacity: 0, x: 15, y: -15, rotate: -15 }}
               animate={{
-                scale: [0, 1.15, 1, 1, 0],
+                scale: [0, 1.1, 1, 1, 0],
                 opacity: [0, 1, 1, 1, 0],
-                x: 28,
-                y: -35,
+                x: 18,
+                y: -24,
                 rotate: 6,
               }}
               exit={{ opacity: 0 }}
@@ -206,7 +206,7 @@ export function WebShooterListener() {
                 times: [0, 0.15, 0.25, 0.8, 1],
                 ease: 'easeOut',
               }}
-              className="absolute top-0 left-0 bg-red-600 text-white font-comic-header text-sm tracking-widest px-3 py-0.5 border-2 border-black shadow-[3px_3px_0px_#000000] uppercase select-none whitespace-nowrap z-20"
+              className="absolute top-0 left-0 bg-red-600 text-white font-comic-header text-xs tracking-widest px-2 py-0.5 border-2 border-black shadow-[2px_2px_0px_#000000] uppercase select-none whitespace-nowrap z-20"
             >
               {shot.badge}
             </motion.div>
