@@ -99,7 +99,7 @@ export default function AboutPage() {
                     Status: Currently Active
                   </div>
                   <h3 className="font-comic-header text-2xl uppercase mt-8 mb-2 text-secondary">
-                    Software Engineer @ eigenstudio
+                    Software Engineer @ <Link href="https://eigenstudio.com/" target="_blank" className='lowercase!'>eigenstudio</Link>
                   </h3>
                   <p className="text-xs md:text-sm font-semibold text-muted-foreground leading-relaxed mb-3">
                     Operating as a Software Engineer building production-grade frontend systems for multi-tenant SaaS applications, integrating backend APIs, and authoring cloud infrastructure CI/CD pipelines.
@@ -323,11 +323,6 @@ export default function AboutPage() {
             </NarratorBox>
             
             <div className="flex flex-wrap gap-4 justify-center">
-              <a href="/resume/yogesh.pdf" target="_blank" download="Yogesh_Tandan_Resume.pdf">
-                <ComicButton variant="accent" size="lg" className="gap-2">
-                  <Download size={20} className="stroke-[3px]" /> Download Resume (PDF)
-                </ComicButton>
-              </a>
               <Link href="/projects">
                 <ComicButton variant="primary" size="lg">
                   Explore Projects Database
@@ -338,6 +333,11 @@ export default function AboutPage() {
                   Send Directive Message
                 </ComicButton>
               </Link>
+              {/* <a href="/resume/yogesh.pdf" target="_blank" download="Yogesh_Tandan_Resume.pdf">
+                <ComicButton variant="accent" size="lg" className="gap-2">
+                  <Download size={20} className="stroke-[3px]" /> Download Resume (PDF)
+                </ComicButton>
+              </a> */}
             </div>
           </div>
 

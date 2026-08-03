@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Bangers, Bebas_Neue, Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
-import "./globals.css";
+import "@/styles/globals.css";
 
 const bangers = Bangers({
   weight: "400",
