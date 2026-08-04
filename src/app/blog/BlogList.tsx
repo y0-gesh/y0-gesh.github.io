@@ -84,15 +84,35 @@ export function BlogList({ initialPosts }: BlogListProps) {
           {/* 1. Featured Big Story Column (only if no category has deleted it) */}
           {featuredPost && (
             <div className="border-3 border-border-color bg-panel-bg shadow-comic p-6 relative overflow-hidden bg-halftone">
-              <div className="absolute top-4 left-4 bg-primary text-white border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase">
+              <div className="absolute top-4 left-4 bg-primary text-white border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase z-10 shadow-comic-md">
                 Featured Editorial
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-6">
                 
-                {/* Visual block */}
-                <div className="lg:col-span-5 aspect-video w-full border-2 border-border-color bg-muted flex items-center justify-center">
-                  <span className="font-comic-title text-2xl text-muted-foreground">Illustration Block</span>
+                {/* Illustration Block Container */}
+                <div className="lg:col-span-5 aspect-video w-full border-3 border-border-color bg-muted relative overflow-hidden group shadow-comic-md">
+                  {featuredPost.coverImage ? (
+                    <>
+                      <img
+                        src={featuredPost.coverImage}
+                        alt={featuredPost.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-4">
+                        <span className="text-[10px] font-comic-title uppercase bg-accent text-accent-foreground border border-border-color px-2 py-0.5 w-fit mb-1.5 shadow-comic-sm">
+                          {featuredPost.category}
+                        </span>
+                        <h3 className="font-comic-header text-xl sm:text-2xl uppercase text-white tracking-wide leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                          <Link href={`/blog/${featuredPost.slug}`}>{featuredPost.title}</Link>
+                        </h3>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      <span className="font-comic-title text-2xl text-muted-foreground">Illustration Block</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Text Block */}
@@ -131,27 +151,50 @@ export function BlogList({ initialPosts }: BlogListProps) {
           {listPosts.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {listPosts.map((post) => (
-                <ComicPanel key={post.slug} className="flex flex-col h-full bg-panel-bg hover:-translate-y-1 transition-transform">
-                  <div className="flex items-center gap-3 text-xs font-bold text-muted-foreground mb-2">
-                    <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
-                    <span className="flex items-center gap-1"><Clock size={12} /> {post.readTime}</span>
+                <ComicPanel key={post.slug} className="flex flex-col h-full bg-panel-bg hover:-translate-y-1 transition-transform overflow-hidden !p-0">
+                  {/* Illustration Block Container */}
+                  <div className="relative aspect-video w-full border-b-3 border-border-color overflow-hidden bg-muted group">
+                    {post.coverImage ? (
+                      <>
+                        <img
+                          src={post.coverImage}
+                          alt={post.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-3.5">
+                          <span className="text-[9px] font-comic-title uppercase bg-accent text-accent-foreground border border-border-color px-1.5 py-0.5 w-fit mb-1 shadow-comic-sm">
+                            {post.category}
+                          </span>
+                          <h4 className="font-comic-header text-lg md:text-xl uppercase text-white tracking-wide leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] line-clamp-2">
+                            <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                          </h4>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <span className="font-comic-title text-lg text-muted-foreground">Illustration Block</span>
+                      </div>
+                    )}
                   </div>
 
-                  <h3 className="font-comic-header text-2xl uppercase mb-2 hover:text-secondary transition-colors">
-                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-                  </h3>
+                  <div className="p-5 flex flex-col flex-grow">
+                    <div className="flex items-center gap-3 text-xs font-bold text-muted-foreground mb-2">
+                      <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
+                      <span className="flex items-center gap-1"><Clock size={12} /> {post.readTime}</span>
+                    </div>
 
-                  <p className="text-xs md:text-sm font-semibold text-muted-foreground mb-4 flex-grow line-clamp-3">
-                    {post.description}
-                  </p>
+                    <p className="text-xs md:text-sm font-semibold text-muted-foreground mb-4 flex-grow line-clamp-3">
+                      {post.description}
+                    </p>
 
-                  <div className="flex justify-between items-center mt-4 border-t-2 border-border-color pt-4">
-                    <span className="text-[10px] font-comic-title uppercase bg-accent text-accent-foreground border border-border-color px-2 py-0.5">
-                      {post.category}
-                    </span>
-                    <Link href={`/blog/${post.slug}`} className="text-xs font-bold text-primary hover:underline uppercase">
-                      Read Chronicle →
-                    </Link>
+                    <div className="flex justify-between items-center mt-auto border-t-2 border-border-color pt-4">
+                      <span className="text-[10px] font-comic-title uppercase bg-accent text-accent-foreground border border-border-color px-2 py-0.5">
+                        {post.category}
+                      </span>
+                      <Link href={`/blog/${post.slug}`} className="text-xs font-bold text-primary hover:underline uppercase">
+                        Read Chronicle →
+                      </Link>
+                    </div>
                   </div>
                 </ComicPanel>
               ))}

@@ -41,10 +41,10 @@ export function ProjectsList({ initialProjects }: ProjectsListProps) {
     <div className="flex flex-col gap-8">
       
       {/* Search and Tabs Panel */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between border-3 border-border-color bg-panel-bg p-4 shadow-comic-md">
+      <div className="flex flex-col md:flex-row gap-4 items-start justify-between border-3 border-border-color bg-panel-bg p-4 shadow-comic-md">
         
         {/* Search input */}
-        <div className="relative w-full md:w-80">
+        <div className="relative w-full md:max-w-1/4">
           <input
             type="text"
             placeholder="Search database..."

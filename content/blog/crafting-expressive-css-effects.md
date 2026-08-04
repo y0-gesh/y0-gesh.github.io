@@ -3,7 +3,7 @@ title: "Crafting Expressive CSS Effects"
 description: "How to use clipping paths, custom radial gradients, and weathering masks for retro graphic novel layouts."
 date: "2026-04-20"
 tags: ["CSS", "Frontend", "CreativeCoding", "Tailwind"]
-coverImage: "/images/blog/css-effects.jpg"
+coverImage: "/images/blog-10.png"
 featured: false
 readTime: "5 min read"
 category: "CSS"

@@ -9,7 +9,7 @@ tags:
   - macOS
   - Developer Tools
   - Version Control
-coverImage: "/images/blog/git_setup.png"
+coverImage: "/images/blog-6.png"
 featured: true
 readTime: "8 min read"
 category: "Development"

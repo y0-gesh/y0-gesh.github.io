@@ -3,7 +3,7 @@ title: "Why Every Portfolio Needs a Strong Theme"
 description: "Ditching generic landing pages for immersive, interactive storytelling that captivates recruiters."
 date: "2026-05-10"
 tags: ["Design", "UX", "Storytelling", "WebDev"]
-coverImage: "/images/blog/design-theme.jpg"
+coverImage: "/images/blog-6.png"
 featured: true
 readTime: "4 min read"
 category: "Design"

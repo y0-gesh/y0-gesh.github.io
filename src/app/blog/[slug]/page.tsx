@@ -57,29 +57,50 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           </div>
 
           {/* Masthead Headline */}
-          <div className="border-3 border-border-color bg-panel-bg p-6 md:p-8 shadow-comic mb-12 relative overflow-hidden">
-            <div className="absolute top-4 left-4 bg-accent text-accent-foreground border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase z-10 shadow-comic-md">
-              {post.category}
-            </div>
+          <div className="border-3 border-border-color bg-panel-bg shadow-comic mb-12 relative overflow-hidden">
+            {post.coverImage && (
+              <div className="relative w-full h-56 sm:h-80 border-b-3 border-border-color overflow-hidden group">
+                <img
+                  src={post.coverImage}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
+                  <h1 className="font-comic-header text-3xl sm:text-5xl uppercase text-white tracking-wide leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                    {post.title}
+                  </h1>
+                </div>
+              </div>
+            )}
 
-            <div className="flex items-center gap-4 text-xs font-bold text-muted-foreground mb-3 mt-6">
-              <span className="flex items-center gap-1">
-                <Calendar size={14} /> {post.date}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock size={14} /> {post.readTime}
-              </span>
-            </div>
+            <div className="p-6 md:p-8">
+              <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+                <div className="bg-accent text-accent-foreground border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase shadow-comic-sm">
+                  {post.category}
+                </div>
 
-            <h1 className="font-comic-header text-4xl sm:text-6xl uppercase leading-tight">
-              {post.title}
-            </h1>
+                <div className="flex items-center gap-4 text-xs font-bold text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <Calendar size={14} /> {post.date}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock size={14} /> {post.readTime}
+                  </span>
+                </div>
+              </div>
+
+              {!post.coverImage && (
+                <h1 className="font-comic-header text-4xl sm:text-6xl uppercase leading-tight mt-4">
+                  {post.title}
+                </h1>
+              )}
+            </div>
           </div>
 
           {/* Grid: Article Body + Table of Contents Sidebar */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
-            {/* Left Column: Markdown content */}
-            <div className="lg:col-span-8 flex flex-col gap-6">
+            {/* Left Column: Markdown content (order-2 on mobile, lg:order-1 on desktop) */}
+            <div className="lg:col-span-8 flex flex-col gap-6 order-2 lg:order-1">
               <ComicPanel skewAngle="none" className="bg-panel-bg p-6 md:p-8">
                 <div
                   className="
@@ -102,8 +123,8 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </ComicPanel>
             </div>
 
-            {/* Right Column: Sidebar Table of Contents */}
-            <div className="lg:col-span-4">
+            {/* Right Column: Sidebar Table of Contents (order-1 on mobile, lg:order-2 on desktop) */}
+            <div className="lg:col-span-4 order-1 lg:order-2">
               <div className="sticky top-24 flex flex-col gap-6">
                 <ComicPanel
                   skewAngle="none"

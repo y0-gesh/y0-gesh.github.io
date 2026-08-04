@@ -51,7 +51,7 @@ export function Footer() {
           <div className="bg-primary text-primary-foreground border-2 border-border-color px-2.5 py-0.5 font-comic-header text-xl uppercase tracking-tighter shadow-comic-md">
             Yogesh Tandan
           </div>
-          <p className="text-xs font-semibold tracking-wide">
+          <p className="text-xs font-semibold tracking-wide text-center">
             © {new Date().getFullYear()} ALL RIGHTS RESERVED. PUBLISHED IN PORTFOLIO.
           </p>
         </div>
