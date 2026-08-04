@@ -12,7 +12,7 @@ tags:
   - security
   - distributed-systems
 
-coverImage: ""
+coverImage: "/images/blog-10.png"
 featured: true
 readTime: "20 min read"
 category: "Learn"

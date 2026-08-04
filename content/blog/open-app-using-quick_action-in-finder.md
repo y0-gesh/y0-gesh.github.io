@@ -7,7 +7,7 @@ tags:
   - Finder
   - Automator
   - Antigravity IDE
-coverImage: ""
+coverImage: "/images/blog-3.png"
 featured: true
 readTime: "4 min read"
 category: "Automation"

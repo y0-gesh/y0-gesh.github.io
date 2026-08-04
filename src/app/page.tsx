@@ -49,7 +49,16 @@ export default function HomePage() {
 
               {/* Narrator block */}
               <NarratorBox title="OPERATIONAL DOSSIER" className="w-full">
-                “Software Engineer at eigenstudio and former developer at Avkalan Labs. Building production-grade multi-tenant SaaS interfaces, optimizing 3D rendering engines (~60% speedup), and authoring AWS/Terraform CI/CD pipelines.”
+                <p>
+                  “Software Engineer at eigenstudio and former developer at Avkalan Labs. Building production-grade multi-tenant SaaS interfaces, optimizing 3D rendering engines (~60% speedup), and authoring AWS/Terraform CI/CD pipelines.”
+                </p>
+                <div className="mt-3 flex justify-end">
+                  <Link href="/about">
+                    <ComicButton variant="primary" size="sm" className="gap-1 text-xs">
+                      Read More <ArrowRight size={14} className="stroke-[3px]" />
+                    </ComicButton>
+                  </Link>
+                </div>
               </NarratorBox>
 
               {/* Sub-capabilities list */}
@@ -302,24 +311,48 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {blogPosts.map((post, idx) => (
-                <ComicPanel key={post.slug} className="flex flex-col h-full hover:rotate-1 transition-transform">
-                  <div className="flex justify-between items-center text-xs font-bold text-muted-foreground mb-2">
-                    <span>{post.date}</span>
-                    <span>{post.readTime}</span>
+                <ComicPanel key={post.slug} className="flex flex-col h-full hover:rotate-1 transition-transform overflow-hidden !p-0">
+                  {/* Illustration Block Container */}
+                  <div className="relative aspect-video w-full border-b-3 border-border-color overflow-hidden bg-muted group">
+                    {post.coverImage ? (
+                      <>
+                        <img
+                          src={post.coverImage}
+                          alt={post.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-3.5">
+                          <span className="text-[9px] font-comic-title uppercase bg-accent text-accent-foreground border border-border-color px-1.5 py-0.5 w-fit mb-1 shadow-comic-sm">
+                            {post.category}
+                          </span>
+                          <h3 className="font-comic-header text-lg sm:text-xl uppercase text-white tracking-wide leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] line-clamp-2">
+                            <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                          </h3>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <span className="font-comic-title text-lg text-muted-foreground">Illustration Block</span>
+                      </div>
+                    )}
                   </div>
-                  <h3 className="font-comic-header text-2xl uppercase mb-2 hover:text-primary transition-colors">
-                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-                  </h3>
-                  <p className="text-xs md:text-sm font-semibold text-muted-foreground mb-4 flex-grow line-clamp-3">
-                    {post.description}
-                  </p>
-                  <div className="flex justify-between items-center mt-4">
-                    <span className="text-[10px] font-comic-title uppercase bg-accent text-accent-foreground border border-border-color px-2 py-0.5">
-                      {post.category}
-                    </span>
-                    <Link href={`/blog/${post.slug}`} className="text-xs font-bold text-primary hover:underline uppercase inline-flex items-center gap-1">
-                      Read Article →
-                    </Link>
+
+                  <div className="p-5 flex flex-col flex-grow">
+                    <div className="flex justify-between items-center text-xs font-bold text-muted-foreground mb-2">
+                      <span>{post.date}</span>
+                      <span>{post.readTime}</span>
+                    </div>
+                    <p className="text-xs md:text-sm font-semibold text-muted-foreground mb-4 flex-grow line-clamp-3">
+                      {post.description}
+                    </p>
+                    <div className="flex justify-between items-center mt-auto border-t-2 border-border-color pt-4">
+                      <span className="text-[10px] font-comic-title uppercase bg-accent text-accent-foreground border border-border-color px-2 py-0.5">
+                        {post.category}
+                      </span>
+                      <Link href={`/blog/${post.slug}`} className="text-xs font-bold text-primary hover:underline uppercase inline-flex items-center gap-1">
+                        Read Article →
+                      </Link>
+                    </div>
                   </div>
                 </ComicPanel>
               ))}

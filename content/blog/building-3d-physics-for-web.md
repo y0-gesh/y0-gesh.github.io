@@ -3,7 +3,7 @@ title: "Building 3D Physics for the Web"
 description: "How to integrate performant rigid body dynamics in browser environments using Rapier and Three.js."
 date: "2026-05-30"
 tags: ["Three.js", "WebGL", "Rapier", "Physics"]
-coverImage: "/images/blog/physics-3d.jpg"
+coverImage: "/images/blog-5.png"
 featured: true
 readTime: "6 min read"
 category: "Web3D"
