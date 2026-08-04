@@ -62,6 +62,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 {/* HTML content rendered from Markdown */}
                 <div 
                   className="
+                    markdown-content
                     font-sans text-sm md:text-base leading-relaxed font-semibold text-foreground
                     space-y-6
                     [&>h2]:font-comic-header [&>h2]:text-3xl [&>h2]:uppercase [&>h2]:text-secondary [&>h2]:mt-8 [&>h2]:mb-3 [&>h2]:border-b-2 [&>h2]:border-border-color [&>h2]:pb-1
@@ -72,9 +73,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                     [&>pre]:border-3 [&>pre]:border-border-color [&>pre]:bg-background [&>pre]:p-4 [&>pre]:overflow-x-auto [&>pre]:shadow-comic-md [&>pre]:font-mono [&>pre]:text-xs [&>pre]:leading-snug
                     [&>code]:font-mono [&>code]:text-xs [&>code]:bg-muted [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:border [&>code]:border-border-color
                     [&>pre>code]:border-none [&>pre>code]:p-0 [&>pre>code]:bg-transparent
-                    [&>table]:w-full [&>table]:border-2 [&>table]:border-border-color [&>table]:my-4
-                    [&>th]:border [&>th]:border-border-color [&>th]:bg-muted [&>th]:p-2 [&>th]:font-comic-title [&>th]:text-xs [&>th]:uppercase
-                    [&>td]:border [&>td]:border-border-color [&>td]:p-2 [&>td]:text-xs
                   "
                   dangerouslySetInnerHTML={{ __html: project.contentHtml }}
                 />

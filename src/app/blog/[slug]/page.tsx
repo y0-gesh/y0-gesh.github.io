@@ -83,6 +83,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <ComicPanel skewAngle="none" className="bg-panel-bg p-6 md:p-8">
                 <div
                   className="
+                    markdown-content
                     font-sans text-sm md:text-base leading-relaxed font-semibold text-foreground
                     space-y-6
                     [&>h1]:font-comic-header [&>h1]:text-4xl [&>h1]:uppercase [&>h1]:text-primary [&>h1]:mt-8 [&>h1]:mb-3 [&>h1]:border-b-2 [&>h1]:border-border-color [&>h1]:pb-1 [&>h1]:scroll-mt-24
