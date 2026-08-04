@@ -117,7 +117,7 @@ export function SpiderWebOverlay() {
       >
         {/* Top Red Label */}
         <div className="absolute -top-3.5 left-6 bg-primary text-white border-2 border-border-color px-3 py-0.5 text-xs font-comic-title uppercase tracking-widest shadow-comic-md">
-          Special Collector's Issue
+          Special Collector&apos;s Issue
         </div>
         
         <h1 className="font-comic-header text-5xl sm:text-6xl uppercase tracking-tight text-stroke-black text-primary leading-none select-none mb-4 pt-2">
