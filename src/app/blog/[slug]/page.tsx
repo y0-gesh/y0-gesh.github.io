@@ -102,18 +102,20 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             </div>
 
             {/* Right Column: Sidebar Table of Contents */}
-            <div className="lg:col-span-4 flex flex-col gap-6">
-              <ComicPanel
-                skewAngle="none"
-                className="bg-panel-bg border-3 sticky top-24 p-5 shadow-comic"
-              >
-                <TableOfContents headings={post.headings} />
-              </ComicPanel>
-              {/* Comic Bulletin box */}
-              <NarratorBox title="COMIC BULLETIN">
-                “Follow details sequentially. Click any index heading above to jump directly to that section.”
-              </NarratorBox>
+            <div className="lg:col-span-4">
+              <div className="sticky top-24 flex flex-col gap-6">
+                <ComicPanel
+                  skewAngle="none"
+                  className="bg-panel-bg border-3 p-5 shadow-comic"
+                >
+                  <TableOfContents headings={post.headings} articleTitle={post.title} />
+                </ComicPanel>
 
+                {/* Comic Bulletin box */}
+                <NarratorBox title="COMIC BULLETIN">
+                  “Follow details sequentially. Click any index heading above to jump directly to that section.”
+                </NarratorBox>
+              </div>
             </div>
           </div>
 
