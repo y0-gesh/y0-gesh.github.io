@@ -6,8 +6,9 @@ import { Footer } from "@/components/layout/Footer";
 import { ComicPanel } from "@/components/ui/ComicPanel";
 import { ComicButton } from "@/components/ui/ComicButton";
 import { NarratorBox } from "@/components/ui/NarratorBox";
+import { TableOfContents } from "@/components/blog/TableOfContents";
 import { getBlogPostBySlug, getAllBlogPosts } from "@/lib/content";
-import { ArrowLeft, Calendar, Clock, BookOpen } from "lucide-react";
+import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import CodeBlockCopy from "@/components/sections/CodeBlockCopy";
 
 interface BlogDetailPageProps {
@@ -31,7 +32,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-background relative">
-      {/* Scroll Reading Progress Bar - fixed right below header or at very top */}
+      {/* Scroll Reading Progress Bar */}
       <div
         id="reading-progress"
         className="fixed top-0 left-0 h-1.5 bg-primary z-999 w-full transform scale-x-0 origin-left"
@@ -41,7 +42,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
       <Header />
       <CodeBlockCopy />
       <main className="grow py-12 bg-halftone">
-        <div className="max-w-5xl mx-auto px-4 md:px-8">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
           {/* Back button */}
           <div className="mb-8">
             <Link href="/blog">
@@ -79,13 +80,14 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
             {/* Left Column: Markdown content */}
             <div className="lg:col-span-8 flex flex-col gap-6">
-              <ComicPanel skewAngle="none" className="bg-panel-bg p-8">
+              <ComicPanel skewAngle="none" className="bg-panel-bg p-6 md:p-8">
                 <div
                   className="
                     font-sans text-sm md:text-base leading-relaxed font-semibold text-foreground
                     space-y-6
-                    [&>h2]:font-comic-header [&>h2]:text-3xl [&>h2]:uppercase [&>h2]:text-secondary [&>h2]:mt-8 [&>h2]:mb-2 [&>h2]:border-b-2 [&>h2]:border-border-color [&>h2]:pb-1
-                    [&>h3]:font-comic-title [&>h3]:text-xl [&>h3]:uppercase [&>h3]:text-foreground [&>h3]:mt-6 [&>h3]:mb-1
+                    [&>h1]:font-comic-header [&>h1]:text-4xl [&>h1]:uppercase [&>h1]:text-primary [&>h1]:mt-8 [&>h1]:mb-3 [&>h1]:border-b-2 [&>h1]:border-border-color [&>h1]:pb-1 [&>h1]:scroll-mt-24
+                    [&>h2]:font-comic-header [&>h2]:text-3xl [&>h2]:uppercase [&>h2]:text-secondary [&>h2]:mt-8 [&>h2]:mb-2 [&>h2]:border-b-2 [&>h2]:border-border-color [&>h2]:pb-1 [&>h2]:scroll-mt-24
+                    [&>h3]:font-comic-title [&>h3]:text-xl [&>h3]:uppercase [&>h3]:text-foreground [&>h3]:mt-6 [&>h3]:mb-1 [&>h3]:scroll-mt-24
                     [&>p>strong]:text-primary [&>p>strong]:font-extrabold
                     [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1.5
                     [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1.5
@@ -103,23 +105,15 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             <div className="lg:col-span-4 flex flex-col gap-6">
               <ComicPanel
                 skewAngle="none"
-                className="bg-panel-bg border-3 sticky top-24"
+                className="bg-panel-bg border-3 sticky top-24 p-5 shadow-comic"
               >
-                <h3 className="font-comic-header text-2xl uppercase border-b-2 border-border-color pb-2 mb-4 text-secondary flex items-center gap-2">
-                  <BookOpen size={20} /> Index Outline
-                </h3>
-
-                {/* Yellow Narrative details card */}
-                <NarratorBox title="COMIC BULLETIN" className="mb-4">
-                  “Follow details sequentially. Ensure variables are loaded
-                  before runtime triggers. Code responsibly.”
-                </NarratorBox>
-
-                <p className="text-xs font-semibold text-muted-foreground leading-relaxed">
-                  Scroll downwards to access chronological article notes. Use
-                  the progress bar at the top to track reading completions.
-                </p>
+                <TableOfContents headings={post.headings} />
               </ComicPanel>
+              {/* Comic Bulletin box */}
+              <NarratorBox title="COMIC BULLETIN">
+                “Follow details sequentially. Click any index heading above to jump directly to that section.”
+              </NarratorBox>
+
             </div>
           </div>
 
