@@ -77,11 +77,11 @@ export default function HomePage() {
                     Explore Missions <ArrowRight size={16} className="inline-block ml-1 stroke-[3px]" />
                   </ComicButton>
                 </Link>
-                <Link href="/about">
+                {/* <Link href="/about">
                   <ComicButton variant="outline" size="md">
                     Read Origin Story
                   </ComicButton>
-                </Link>
+                </Link> */}
               </div>
 
             </div>
@@ -158,11 +158,11 @@ export default function HomePage() {
                   Cloud & Infrastructure Operations
                 </h2>
               </div>
-              <a href="/resume/yogesh.pdf" target="_blank" download="Yogesh_Tandan_Resume.pdf">
+              {/* <a href="/resume/yogesh.pdf" target="_blank" download="Yogesh_Tandan_Resume.pdf">
                 <ComicButton variant="accent" size="sm" className="gap-1.5">
                   <Download size={14} className="stroke-[3px]" /> Download Resume PDF
                 </ComicButton>
-              </a>
+              </a> */}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -62,7 +62,7 @@ export function Header() {
 
         {/* Action Controls (Resume Button, Theme Toggle & Mobile Burger) */}
         <div className="flex items-center gap-2 pl-4">
-          <a
+          {/* <a
             href="/resume/yogesh.pdf"
             target="_blank"
             download="Yogesh_Tandan_Resume.pdf"
@@ -73,7 +73,7 @@ export function Header() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
             <span>Resume</span>
-          </a>
+          </a> */}
 
           {mounted && (
             <button
