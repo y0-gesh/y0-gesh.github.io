@@ -25,7 +25,7 @@ A structured roadmap for mastering system design, covering architecture fundamen
 
 ---
 
-# 1. Importance of System Design Skills
+## 1. Importance of System Design Skills
 
 System design is one of the biggest differentiators between a mid-level and senior software engineer.
 
@@ -44,11 +44,11 @@ A senior engineer is expected to:
 
 ---
 
-# 2. Starting with a Single Server Architecture
+## 2. Starting with a Single Server Architecture
 
 Every scalable system begins with a simple architecture.
 
-## Architecture
+### Architecture
 
 ```
 Users
@@ -97,14 +97,14 @@ Response
 }
 ```
 
-## Advantages
+### Advantages
 
 - Easy to build
 - Easy to understand
 - Minimal infrastructure
 - Perfect for MVPs and small products
 
-## Limitations
+### Limitations
 
 - Single point of failure
 - Limited hardware resources
@@ -112,9 +112,9 @@ Response
 
 ---
 
-# 3. Scaling Strategies
+## 3. Scaling Strategies
 
-## 3.1 Vertical Scaling (Scale-Up)
+### 3.1 Vertical Scaling (Scale-Up)
 
 Increase the resources of one server.
 
@@ -124,7 +124,7 @@ Examples:
 - More CPU
 - Faster SSD
 
-### Advantages
+#### Advantages
 
 - Very simple
 - No application changes

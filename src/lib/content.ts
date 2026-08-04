@@ -1,9 +1,15 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { marked } from "marked";
+import { Marked } from "marked";
 
 const contentDirectory = path.join(process.cwd(), "content");
+
+export interface HeadingItem {
+  id: string;
+  text: string;
+  level: number;
+}
 
 export interface ProjectData {
   slug: string;
@@ -16,6 +22,7 @@ export interface ProjectData {
   githubUrl?: string;
   liveUrl?: string;
   contentHtml: string;
+  headings: HeadingItem[];
 }
 
 export interface BlogPostData {
@@ -29,6 +36,71 @@ export interface BlogPostData {
   readTime: string;
   category: string;
   contentHtml: string;
+  headings: HeadingItem[];
+}
+
+// Helper function to parse markdown into HTML and extract heading structure with unique IDs
+export function parseMarkdownContent(rawMarkdown: string): { contentHtml: string; headings: HeadingItem[] } {
+  const markedLexer = new Marked();
+  const seenHeadings = new Map<string, number>();
+
+  const slugify = (text: string) => {
+    let slug = text
+      .toLowerCase()
+      .replace(/<[^>]+>/g, "")
+      .replace(/[^\w\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+    if (!slug) slug = "section";
+    const count = seenHeadings.get(slug) || 0;
+    seenHeadings.set(slug, count + 1);
+    return count > 0 ? `${slug}-${count}` : slug;
+  };
+
+  const headings: HeadingItem[] = [];
+  const tokens = markedLexer.lexer(rawMarkdown);
+
+  tokens.forEach((token) => {
+    if (token.type === "heading" && token.depth <= 3) {
+      const text = token.text.trim();
+      const id = slugify(text);
+      headings.push({
+        id,
+        text,
+        level: token.depth,
+      });
+    }
+  });
+
+  const seenRender = new Map<string, number>();
+  const slugifyRender = (text: string) => {
+    let slug = text
+      .toLowerCase()
+      .replace(/<[^>]+>/g, "")
+      .replace(/[^\w\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+    if (!slug) slug = "section";
+    const count = seenRender.get(slug) || 0;
+    seenRender.set(slug, count + 1);
+    return count > 0 ? `${slug}-${count}` : slug;
+  };
+
+  const markedParser = new Marked({
+    renderer: {
+      heading({ text, depth }) {
+        const id = slugifyRender(text);
+        return `<h${depth} id="${id}">${text}</h${depth}>\n`;
+      },
+    },
+  });
+
+  const contentHtml = markedParser.parse(rawMarkdown) as string;
+
+  return {
+    contentHtml,
+    headings,
+  };
 }
 
 // Helper to get files in directory safely
@@ -48,7 +120,8 @@ export function getAllProjects(): ProjectData[] {
     const fullPath = path.join(contentDirectory, "projects", filename);
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
-    
+    const { contentHtml, headings } = parseMarkdownContent(content);
+
     return {
       slug,
       title: data.title || "Untitled Project",
@@ -59,7 +132,8 @@ export function getAllProjects(): ProjectData[] {
       featured: !!data.featured,
       githubUrl: data.githubUrl || "",
       liveUrl: data.liveUrl || "",
-      contentHtml: marked.parse(content) as string,
+      contentHtml,
+      headings,
     };
   });
 
@@ -71,10 +145,11 @@ export function getProjectBySlug(slug: string): ProjectData | null {
   try {
     const fullPath = path.join(contentDirectory, "projects", `${slug}.md`);
     if (!fs.existsSync(fullPath)) return null;
-    
+
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
-    
+    const { contentHtml, headings } = parseMarkdownContent(content);
+
     return {
       slug,
       title: data.title || "Untitled Project",
@@ -85,7 +160,8 @@ export function getProjectBySlug(slug: string): ProjectData | null {
       featured: !!data.featured,
       githubUrl: data.githubUrl || "",
       liveUrl: data.liveUrl || "",
-      contentHtml: marked.parse(content) as string,
+      contentHtml,
+      headings,
     };
   } catch {
     return null;
@@ -99,7 +175,8 @@ export function getAllBlogPosts(): BlogPostData[] {
     const fullPath = path.join(contentDirectory, "blog", filename);
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
-    
+    const { contentHtml, headings } = parseMarkdownContent(content);
+
     return {
       slug,
       title: data.title || "Untitled Article",
@@ -110,7 +187,8 @@ export function getAllBlogPosts(): BlogPostData[] {
       featured: !!data.featured,
       readTime: data.readTime || "5 min read",
       category: data.category || "General",
-      contentHtml: marked.parse(content) as string,
+      contentHtml,
+      headings,
     };
   });
 
@@ -122,10 +200,11 @@ export function getBlogPostBySlug(slug: string): BlogPostData | null {
   try {
     const fullPath = path.join(contentDirectory, "blog", `${slug}.md`);
     if (!fs.existsSync(fullPath)) return null;
-    
+
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
-    
+    const { contentHtml, headings } = parseMarkdownContent(content);
+
     return {
       slug,
       title: data.title || "Untitled Article",
@@ -136,7 +215,8 @@ export function getBlogPostBySlug(slug: string): BlogPostData | null {
       featured: !!data.featured,
       readTime: data.readTime || "5 min read",
       category: data.category || "General",
-      contentHtml: marked.parse(content) as string,
+      contentHtml,
+      headings,
     };
   } catch {
     return null;
