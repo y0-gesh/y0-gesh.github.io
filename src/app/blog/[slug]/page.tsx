@@ -107,7 +107,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                     markdown-content
                     font-sans text-sm md:text-base leading-relaxed font-semibold text-foreground
                     space-y-6
-                    [&>h1]:font-comic-header [&>h1]:text-4xl [&>h1]:uppercase [&>h1]:text-primary [&>h1]:mt-8 [&>h1]:mb-3 [&>h1]:border-b-2 [&>h1]:border-border-color [&>h1]:pb-1 [&>h1]:scroll-mt-24
+                    [&>h1]:hidden
                     [&>h2]:font-comic-header [&>h2]:text-3xl [&>h2]:uppercase [&>h2]:text-secondary [&>h2]:mt-8 [&>h2]:mb-2 [&>h2]:border-b-2 [&>h2]:border-border-color [&>h2]:pb-1 [&>h2]:scroll-mt-24
                     [&>h3]:font-comic-title [&>h3]:text-xl [&>h3]:uppercase [&>h3]:text-foreground [&>h3]:mt-6 [&>h3]:mb-1 [&>h3]:scroll-mt-24
                     [&>p>strong]:text-primary [&>p>strong]:font-extrabold

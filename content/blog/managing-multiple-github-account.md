@@ -15,8 +15,6 @@ readTime: "8 min read"
 category: "Development"
 ---
 
-# Managing Multiple GitHub Accounts on a Single Mac with Automatic Git Identity Switching
-
 ## Introduction
 
 As developers, it is common to maintain separate GitHub accounts for personal projects and professional work. While this separation helps keep repositories organized, it often introduces a frustrating problem: accidentally committing with the wrong email address or pushing to the wrong GitHub account.
@@ -32,7 +30,7 @@ This article documents the complete setup.
 
 ---
 
-# The Problem
+## The Problem
 
 Without proper configuration, Git uses a single global identity:
 
@@ -58,15 +56,15 @@ The goal is simple:
 
 ---
 
-# Solution Overview
+## Solution Overview
 
 The setup consists of two independent layers:
 
-## Layer 1: SSH Authentication
+### Layer 1: SSH Authentication
 
 SSH determines which GitHub account is used when cloning, pushing, or pulling repositories.
 
-## Layer 2: Git Identity
+### Layer 2: Git Identity
 
 Git determines which author name and email are attached to commits.
 
@@ -74,11 +72,11 @@ Both layers must be configured correctly.
 
 ---
 
-# Step 1: Create Separate SSH Keys
+## Step 1: Create Separate SSH Keys
 
 Generate an SSH key for each GitHub account.
 
-## Personal Account
+### Personal Account
 
 ```bash
 ssh-keygen -t ed25519 -C "yogeshtandan25@gmail.com"
@@ -90,7 +88,7 @@ Save as:
 ~/.ssh/id_ed25519_personal
 ```
 
-## Work Account
+### Work Account
 
 ```bash
 ssh-keygen -t ed25519 -C "yogesh.work@gmail.com"
@@ -104,7 +102,7 @@ Save as:
 
 ---
 
-# Step 2: Add Keys to SSH Agent
+## Step 2: Add Keys to SSH Agent
 
 Start the SSH agent:
 
@@ -127,7 +125,7 @@ ssh-add -l
 
 ---
 
-# Step 3: Configure SSH Host Aliases
+## Step 3: Configure SSH Host Aliases
 
 Edit:
 
@@ -157,13 +155,13 @@ This allows GitHub to recognize each account independently.
 
 ---
 
-# Step 4: Configure Automatic Git Identity Switching
+## Step 4: Configure Automatic Git Identity Switching
 
 Git provides a powerful feature called `includeIf`.
 
 This feature loads different configuration files depending on the repository path.
 
-## Global Configuration
+### Global Configuration
 
 Edit:
 
@@ -191,7 +189,7 @@ The identity is determined entirely by repository location.
 
 ---
 
-# Step 5: Create Personal Git Configuration
+## Step 5: Create Personal Git Configuration
 
 Create:
 
@@ -207,7 +205,7 @@ Create:
 
 ---
 
-# Step 6: Create Work Git Configuration
+## Step 6: Create Work Git Configuration
 
 Create:
 
@@ -223,7 +221,7 @@ Create:
 
 ---
 
-# Step 7: Verify Configuration
+## Step 7: Verify Configuration
 
 Navigate into a personal repository:
 
@@ -263,7 +261,7 @@ yogesh.work@gmail.com
 
 ---
 
-# Verify the Source of Configuration
+## Verify the Source of Configuration
 
 To determine exactly which configuration file Git is using:
 
@@ -282,7 +280,7 @@ This command is extremely useful when debugging configuration issues.
 
 ---
 
-# Common Pitfall: Local Repository Overrides
+## Common Pitfall: Local Repository Overrides
 
 Git follows a hierarchy:
 
@@ -319,17 +317,17 @@ git config --unset user.email
 
 ---
 
-# Cloning Repositories Correctly
+## Cloning Repositories Correctly
 
 SSH aliases only work if they are used in repository URLs.
 
-## Personal Repository
+### Personal Repository
 
 ```bash
 git clone git@github-personal:username/project.git
 ```
 
-## Work Repository
+### Work Repository
 
 ```bash
 git clone git@github-work:organization/project.git
@@ -345,7 +343,7 @@ because this bypasses the SSH alias configuration.
 
 ---
 
-# Final Folder Structure
+## Final Folder Structure
 
 ```text
 /Users/mac
@@ -365,7 +363,7 @@ With this structure, Git automatically applies the correct identity and SSH key 
 
 ---
 
-# Conclusion
+## Conclusion
 
 Managing multiple GitHub accounts does not require constantly switching credentials or editing Git configuration files.
 

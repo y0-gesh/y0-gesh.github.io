@@ -13,8 +13,6 @@ readTime: "4 min read"
 category: "Automation"
 ---
 
-# Add "Open in Antigravity IDE" to Finder on macOS
-
 If you frequently work with **Antigravity IDE**, opening projects directly from Finder can save time. This guide shows how to create a Finder Quick Action that adds an **Open in Antigravity IDE** option to the right-click context menu.
 
 ## Prerequisites
@@ -24,7 +22,7 @@ If you frequently work with **Antigravity IDE**, opening projects directly from 
 
 ---
 
-# Step 1: Verify the Application Name
+## Step 1: Verify the Application Name
 
 Before creating the Quick Action, ensure macOS recognizes the application name.
 
@@ -56,7 +54,7 @@ If the IDE launches successfully, continue to the next step.
 
 ---
 
-# Step 2: Open Automator
+## Step 2: Open Automator
 
 1. Press **⌘ + Space** to open Spotlight.
 2. Search for **Automator**.
@@ -64,7 +62,7 @@ If the IDE launches successfully, continue to the next step.
 
 ---
 
-# Step 3: Create a Quick Action
+## Step 3: Create a Quick Action
 
 1. Click **New Document**.
 2. Select **Quick Action**.
@@ -72,7 +70,7 @@ If the IDE launches successfully, continue to the next step.
 
 ---
 
-# Step 4: Configure the Workflow
+## Step 4: Configure the Workflow
 
 At the top of the workflow, configure the following settings:
 
@@ -85,7 +83,7 @@ No other changes are required.
 
 ---
 
-# Step 5: Add the "Run Shell Script" Action
+## Step 5: Add the "Run Shell Script" Action
 
 1. In the search bar on the left, search for:
 
@@ -97,7 +95,7 @@ Run Shell Script
 
 ---
 
-# Step 6: Configure the Shell Script
+## Step 6: Configure the Shell Script
 
 Update the action with the following settings:
 
@@ -110,7 +108,7 @@ Passing the input as arguments allows Finder to send the selected files or folde
 
 ---
 
-# Step 7: Add the Shell Script
+## Step 7: Add the Shell Script
 
 Replace the default script with the following:
 
@@ -138,7 +136,7 @@ This script supports:
 
 ---
 
-# Step 8: Save the Quick Action
+## Step 8: Save the Quick Action
 
 Press:
 
@@ -154,7 +152,7 @@ Open in Antigravity IDE
 
 ---
 
-# Step 9: Test the Quick Action
+## Step 9: Test the Quick Action
 
 1. Open **Finder**.
 2. Right-click any file or folder.
@@ -176,7 +174,7 @@ Click the option, and the selected file or folder should open in Antigravity IDE
 
 ---
 
-# Enable the Quick Action (Optional)
+## Enable the Quick Action (Optional)
 
 If the Quick Action does not appear:
 
@@ -197,7 +195,7 @@ Open in Antigravity IDE
 
 ---
 
-# Assign a Keyboard Shortcut (Optional)
+## Assign a Keyboard Shortcut (Optional)
 
 You can also launch the Quick Action using a keyboard shortcut.
 
@@ -224,6 +222,6 @@ Assign your preferred shortcut, for example:
 
 ---
 
-# Result
+## Result
 
 You can now open any file or folder directly in **Antigravity IDE** by right-clicking it in Finder and selecting **Open in Antigravity IDE**, making it easier to launch projects without opening the IDE first.

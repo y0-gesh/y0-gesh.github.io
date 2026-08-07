@@ -18,9 +18,6 @@ readTime: "20 min read"
 category: "Learn"
 ---
 
-
-# Mastering System Design: From Foundations to Advanced Architecture
-
 A structured roadmap for mastering system design, covering architecture fundamentals, scalability, API design, databases, networking, security, and distributed systems. This guide is intended for developers transitioning from mid-level to senior engineering roles.
 
 ---
@@ -162,7 +159,7 @@ Instead of upgrading one server, add multiple servers.
 
 ---
 
-# 4. Load Balancing
+## 4. Load Balancing
 
 A load balancer distributes incoming requests across multiple servers.
 
@@ -200,7 +197,7 @@ This improves system availability.
 
 ---
 
-# 5. Database Selection
+## 5. Database Selection
 
 There are two major database categories.
 
@@ -332,7 +329,7 @@ Best for:
 
 ---
 
-# 6. API Design
+## 6. API Design
 
 ## What is an API?
 
@@ -347,7 +344,7 @@ The client doesn't need to know how the server works internally.
 
 ---
 
-# 7. API Styles
+## 7. API Styles
 
 ## REST
 
@@ -419,7 +416,7 @@ Best for
 
 ---
 
-# 8. REST API Best Practices
+## 8. REST API Best Practices
 
 ## Resource Naming
 
@@ -504,7 +501,7 @@ Versioning maintains backward compatibility.
 
 ---
 
-# 9. GraphQL Best Practices
+## 9. GraphQL Best Practices
 
 - Keep schemas modular
 - Limit query depth
@@ -523,7 +520,7 @@ Errors are included inside the response body.
 
 ---
 
-# 10. Network Communication Protocols
+## 10. Network Communication Protocols
 
 ## HTTP / HTTPS
 
@@ -583,7 +580,7 @@ Ideal for:
 
 ---
 
-# 11. Transport Layer Protocols
+## 11. Transport Layer Protocols
 
 ## TCP
 
@@ -631,7 +628,7 @@ Best for:
 
 ---
 
-# 12. Security
+## 12. Security
 
 Security consists of two major concepts.
 
@@ -640,7 +637,7 @@ Security consists of two major concepts.
 
 ---
 
-# 13. Authentication
+## 13. Authentication
 
 Authentication answers:
 
@@ -727,7 +724,7 @@ Common protocols:
 
 ---
 
-# 14. Authorization
+## 14. Authorization
 
 Authorization answers:
 
@@ -795,7 +792,7 @@ User C → Owner
 
 ---
 
-# 15. Learning Roadmap
+## 15. Learning Roadmap
 
 A recommended progression for mastering system design.
 
@@ -868,7 +865,7 @@ Topics
 
 ---
 
-# Key Takeaways
+## Key Takeaways
 
 - System design is a critical skill for senior software engineers.
 - Begin with a simple single-server architecture before introducing distributed components.
@@ -883,6 +880,6 @@ Topics
 
 ---
 
-# Conclusion
+## Conclusion
 
 Mastering system design requires both theoretical understanding and hands-on implementation. By progressing from single-server architectures to scalable distributed systems, learning API and database design, implementing secure authentication and authorization, and gaining cloud experience, developers can confidently design reliable, high-performance, and maintainable software systems suitable for modern production environments and senior engineering responsibilities.
