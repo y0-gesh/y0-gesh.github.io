@@ -82,7 +82,7 @@ export function TableOfContents({ headings, articleTitle }: TableOfContentsProps
       </p>
 
       {/* Heading links index container */}
-      <nav className="flex flex-col gap-1.5 max-h-[42vh] md:max-h-[50vh] overflow-y-auto pr-2 scrollbar-thin select-none font-sans">
+      <nav className="flex flex-col gap-1.5 max-h-[42vh] md:max-h-[50vh] overflow-y-auto pr-2 scrollbar-thin select-none font-sans pb-1">
         {displayHeadings.map((heading, index) => {
           const isActive = activeId === heading.id;
           
