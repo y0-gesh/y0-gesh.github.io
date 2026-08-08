@@ -4,8 +4,16 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export function SpiderWebOverlay() {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [isDropped, setIsDropped] = useState(false);
+
+  // Check sessionStorage on client mount so it only shows once per browser session
+  useEffect(() => {
+    const hasSeenWeb = sessionStorage.getItem('spider_web_seen');
+    if (!hasSeenWeb) {
+      setIsVisible(true);
+    }
+  }, []);
 
   // Restore scroll instantly once dropped, prevent scroll only while active
   useEffect(() => {
@@ -38,6 +46,7 @@ export function SpiderWebOverlay() {
         isDropped ? 'pointer-events-none' : ''
       }`}
       onClick={() => {
+        sessionStorage.setItem('spider_web_seen', 'true');
         setIsDropped(true);
         // Completely remove overlay from DOM after drop animation finishes
         setTimeout(() => setIsVisible(false), 900);

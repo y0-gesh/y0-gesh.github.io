@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
@@ -6,11 +7,59 @@ import { Footer } from '@/components/layout/Footer';
 import { ComicPanel } from '@/components/ui/ComicPanel';
 import { ComicButton } from '@/components/ui/ComicButton';
 import { NarratorBox } from '@/components/ui/NarratorBox';
-import { getProjectBySlug, getAllProjects } from '@/lib/content';
-import { ArrowLeft, ArrowRight, ExternalLink, Calendar } from 'lucide-react';
+import { getProjectBySlug, getAllProjects, getAllBlogPosts } from '@/lib/content';
+import { ArrowLeft, ArrowRight, ExternalLink, Calendar, BookOpen } from 'lucide-react';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { seoConfig } from '@/lib/seo';
 
 interface ProjectDetailPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: ProjectDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
+
+  if (!project) {
+    return {
+      title: "Project Not Found",
+    };
+  }
+
+  const title = `${project.title} — Case Study`;
+  const description = project.description || `Technical case study and mission report for ${project.title} by Yogesh Tandan.`;
+  const canonicalUrl = `/projects/${project.slug}`;
+  const ogImage = project.coverImage && project.coverImage !== "/placeholder.jpg"
+    ? `${seoConfig.siteUrl}${project.coverImage}`
+    : seoConfig.defaultOgImage;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${seoConfig.siteUrl}/projects/${project.slug}`,
+      type: "article",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: project.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
+  };
 }
 
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
@@ -27,8 +76,28 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   const prevProject = currentIndex > 0 ? allProjects[currentIndex - 1] : null;
   const nextProject = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : null;
 
+  // Related blog articles
+  const relatedArticles = getAllBlogPosts().slice(0, 2);
+
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": project.title,
+    "description": project.description,
+    "url": `${seoConfig.siteUrl}/projects/${project.slug}`,
+    "codeRepository": project.githubUrl || undefined,
+    "programmingLanguage": project.tags,
+    "author": {
+      "@type": "Person",
+      "name": seoConfig.authorName,
+      "url": seoConfig.siteUrl,
+    },
+    "datePublished": project.date,
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <JsonLd data={projectJsonLd} />
       <Header />
 
       <main className="flex-grow py-12 bg-halftone">
@@ -136,6 +205,31 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               <NarratorBox title="SYSTEM ADVISORY" className="bg-accent text-accent-foreground">
                 “This capsule holds active build parameters. Coordinates are verified, operations are verified, repositories remain under active surveillance.”
               </NarratorBox>
+
+              {/* Related Chronicles */}
+              {relatedArticles.length > 0 && (
+                <ComicPanel skewAngle="none" className="bg-panel-bg border-3">
+                  <h4 className="font-comic-header text-xl uppercase border-b-2 border-border-color pb-2 mb-3 text-secondary flex items-center gap-2">
+                    <BookOpen size={16} /> Related Chronicles
+                  </h4>
+                  <div className="flex flex-col gap-3">
+                    {relatedArticles.map((article) => (
+                      <Link
+                        key={article.slug}
+                        href={`/blog/${article.slug}`}
+                        className="group border-2 border-border-color p-2.5 bg-background hover:bg-accent transition-colors shadow-comic-sm block"
+                      >
+                        <span className="text-[9px] font-comic-title uppercase bg-accent text-accent-foreground px-1.5 py-0.5 border border-border-color inline-block mb-1">
+                          {article.category}
+                        </span>
+                        <h5 className="font-comic-header text-sm uppercase text-foreground group-hover:text-primary leading-tight line-clamp-2">
+                          {article.title}
+                        </h5>
+                      </Link>
+                    ))}
+                  </div>
+                </ComicPanel>
+              )}
 
             </div>
 

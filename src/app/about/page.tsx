@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ComicPanel } from '@/components/ui/ComicPanel';
@@ -7,8 +8,43 @@ import { SoundEffectBadge } from '@/components/ui/SoundEffectBadge';
 import { ComicButton } from '@/components/ui/ComicButton';
 import Link from 'next/link';
 import { Download, Server, Cpu, Layers, ShieldCheck, Terminal, ArrowRight, ExternalLink } from 'lucide-react';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { seoConfig } from '@/lib/seo';
+
+export const metadata: Metadata = {
+  title: "Origin Story — Yogesh Tandan, Software Engineer",
+  description: "The origin story, technical powers, engineering background, and experience of Yogesh Tandan — Software Engineer at eigenstudio specializing in Next.js multi-tenant SaaS, WebGL 3D rendering engines, and AWS/Terraform DevOps.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "Origin Story — Yogesh Tandan, Software Engineer",
+    description: "The origin story, technical powers, engineering background, and experience of Yogesh Tandan — Software Engineer at eigenstudio specializing in Next.js multi-tenant SaaS, WebGL 3D rendering engines, and AWS/Terraform DevOps.",
+    url: `${seoConfig.siteUrl}/about`,
+  },
+};
 
 export default function AboutPage() {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": seoConfig.authorName,
+    "url": `${seoConfig.siteUrl}/about`,
+    "jobTitle": seoConfig.jobTitle,
+    "worksFor": {
+      "@type": "Organization",
+      "name": seoConfig.company,
+    },
+    "alumniOf": {
+      "@type": "Organization",
+      "name": seoConfig.previousCompany,
+    },
+    "sameAs": [
+      seoConfig.socialLinks.github,
+      seoConfig.socialLinks.linkedin,
+      seoConfig.socialLinks.twitter,
+    ],
+  };
   // Marvel Power Grid Capability Facts
   const powerGrid = [
     { 
@@ -52,6 +88,7 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <JsonLd data={personJsonLd} />
       <Header />
 
       <main className="grow py-12 bg-halftone">

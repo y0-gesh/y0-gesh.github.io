@@ -222,3 +222,51 @@ export function getBlogPostBySlug(slug: string): BlogPostData | null {
     return null;
   }
 }
+
+export interface CategoryInfo {
+  name: string;
+  slug: string;
+  count: number;
+}
+
+export function getAllCategories(): CategoryInfo[] {
+  const posts = getAllBlogPosts();
+  const categoryMap = new Map<string, { name: string; count: number }>();
+
+  posts.forEach((post) => {
+    const name = post.category;
+    const slug = name.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+    const existing = categoryMap.get(slug);
+    if (existing) {
+      existing.count += 1;
+    } else {
+      categoryMap.set(slug, { name, count: 1 });
+    }
+  });
+
+  return Array.from(categoryMap.entries()).map(([slug, info]) => ({
+    name: info.name,
+    slug,
+    count: info.count,
+  }));
+}
+
+export function getBlogPostsByCategory(categorySlug: string): { categoryName: string; posts: BlogPostData[] } {
+  const posts = getAllBlogPosts();
+  const matchingPosts = posts.filter((post) => {
+    const slug = post.category.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+    return slug === categorySlug.toLowerCase();
+  });
+
+  const categoryName = matchingPosts[0]?.category || categorySlug;
+  return { categoryName, posts: matchingPosts };
+}
+
+export function getRelatedBlogPosts(currentSlug: string, category: string, limit: number = 3): BlogPostData[] {
+  const allPosts = getAllBlogPosts().filter((p) => p.slug !== currentSlug);
+  const sameCategory = allPosts.filter((p) => p.category.toLowerCase() === category.toLowerCase());
+  const otherPosts = allPosts.filter((p) => p.category.toLowerCase() !== category.toLowerCase());
+  
+  return [...sameCategory, ...otherPosts].slice(0, limit);
+}
+

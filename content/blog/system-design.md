@@ -134,7 +134,7 @@ Examples:
 
 ---
 
-## 3.2 Horizontal Scaling (Scale-Out)
+### 3.2 Horizontal Scaling (Scale-Out)
 
 Instead of upgrading one server, add multiple servers.
 
@@ -144,14 +144,14 @@ Instead of upgrading one server, add multiple servers.
        App1   App2   App3
 ```
 
-### Advantages
+#### Advantages
 
 - High availability
 - Fault tolerance
 - Easy expansion
 - Better performance
 
-### Disadvantages
+#### Disadvantages
 
 - Infrastructure becomes more complex
 - Requires load balancing
@@ -172,7 +172,7 @@ Load Balancer
  └── Server C
 ```
 
-## Common Algorithms
+### Common Algorithms
 
 | Algorithm | Description | Best Use Case |
 |------------|-------------|---------------|
@@ -184,7 +184,7 @@ Load Balancer
 | Geographic Routing | Routes users to nearest region | Global applications |
 | Consistent Hashing | Maps clients consistently to servers | Distributed caching |
 
-## Health Checks
+### Health Checks
 
 Load balancers continuously monitor server health.
 
@@ -206,7 +206,7 @@ There are two major database categories.
 
 ---
 
-## 5.1 SQL Databases
+### 5.1 SQL Databases
 
 Examples
 
@@ -230,26 +230,26 @@ Best suited for:
 - ERP
 - Financial applications
 
-### Advantages
+#### Advantages
 
 - Strong consistency
 - Complex joins
 - Mature ecosystem
 
-### Disadvantages
+#### Disadvantages
 
 - Harder horizontal scaling
 - Fixed schema
 
 ---
 
-## 5.2 NoSQL Databases
+### 5.2 NoSQL Databases
 
 Designed for flexibility and scalability.
 
 ---
 
-### Document Database
+#### Document Database
 
 Stores JSON-like documents.
 
@@ -265,7 +265,7 @@ Best for:
 
 ---
 
-### Wide Column Database
+#### Wide Column Database
 
 Dynamic columns optimized for massive writes.
 
@@ -282,7 +282,7 @@ Best for:
 
 ---
 
-### Key-Value Store
+#### Key-Value Store
 
 Stores simple key-value pairs.
 
@@ -299,7 +299,7 @@ Best for:
 
 ---
 
-### Graph Database
+#### Graph Database
 
 Stores relationships.
 
@@ -316,7 +316,7 @@ Best for:
 
 ---
 
-## SQL vs NoSQL
+### SQL vs NoSQL
 
 | Requirement | SQL | NoSQL |
 |-------------|-----|--------|
@@ -331,7 +331,7 @@ Best for:
 
 ## 6. API Design
 
-## What is an API?
+### What is an API?
 
 An API (Application Programming Interface) defines how software components communicate.
 
@@ -346,7 +346,7 @@ The client doesn't need to know how the server works internally.
 
 ## 7. API Styles
 
-## REST
+### REST
 
 Characteristics
 
@@ -372,7 +372,7 @@ Best for
 
 ---
 
-## GraphQL
+### GraphQL
 
 Characteristics
 
@@ -400,7 +400,7 @@ Best for
 
 ---
 
-## gRPC
+### gRPC
 
 Characteristics
 
@@ -418,7 +418,7 @@ Best for
 
 ## 8. REST API Best Practices
 
-## Resource Naming
+### Resource Naming
 
 Use nouns.
 
@@ -441,7 +441,7 @@ Bad
 
 ---
 
-## HTTP Methods
+### HTTP Methods
 
 | Method | Operation |
 |----------|------------|
@@ -453,7 +453,7 @@ Bad
 
 ---
 
-## Query Parameters
+### Query Parameters
 
 Filtering
 
@@ -475,7 +475,7 @@ GET /products?page=2&limit=20
 
 ---
 
-## Versioning
+### Versioning
 
 ```
 /api/v1/users
@@ -487,7 +487,7 @@ Versioning maintains backward compatibility.
 
 ---
 
-## Status Codes
+### Status Codes
 
 | Code | Meaning |
 |------|----------|
@@ -522,7 +522,7 @@ Errors are included inside the response body.
 
 ## 10. Network Communication Protocols
 
-## HTTP / HTTPS
+### HTTP / HTTPS
 
 Foundation of REST and GraphQL APIs.
 
@@ -535,7 +535,7 @@ to encrypt communication.
 
 ---
 
-## WebSockets
+### WebSockets
 
 Persistent bidirectional connection.
 
@@ -548,7 +548,7 @@ Ideal for:
 
 ---
 
-## AMQP
+### AMQP
 
 Advanced Message Queuing Protocol.
 
@@ -566,7 +566,7 @@ Ideal for:
 
 ---
 
-## gRPC
+### gRPC
 
 Uses:
 
@@ -582,7 +582,7 @@ Ideal for:
 
 ## 11. Transport Layer Protocols
 
-## TCP
+### TCP
 
 Characteristics
 
@@ -599,7 +599,7 @@ Best for:
 
 ---
 
-## UDP
+### UDP
 
 Characteristics
 
@@ -616,7 +616,7 @@ Best for:
 
 ---
 
-## TCP vs UDP
+### TCP vs UDP
 
 | Feature | TCP | UDP |
 |----------|-----|-----|
@@ -645,7 +645,7 @@ Authentication answers:
 
 ---
 
-## Basic Authentication
+### Basic Authentication
 
 Uses:
 
@@ -658,7 +658,7 @@ Always use HTTPS.
 
 ---
 
-## Bearer Token
+### Bearer Token
 
 Client sends:
 
@@ -674,7 +674,7 @@ Advantages
 
 ---
 
-## OAuth2 + JWT
+### OAuth2 + JWT
 
 Allows login using:
 
@@ -692,14 +692,14 @@ JWT contains:
 
 ---
 
-## Access Token + Refresh Token
+### Access Token + Refresh Token
 
-### Access Token
+#### Access Token
 
 - Short lifespan
 - Used on every request
 
-### Refresh Token
+#### Refresh Token
 
 - Long lifespan
 - Generates new access tokens
@@ -711,7 +711,7 @@ Benefits
 
 ---
 
-## Single Sign-On (SSO)
+### Single Sign-On (SSO)
 
 User logs in once.
 
@@ -732,7 +732,7 @@ Authorization answers:
 
 ---
 
-## Role-Based Access Control (RBAC)
+### Role-Based Access Control (RBAC)
 
 Permissions are assigned through roles.
 
@@ -752,7 +752,7 @@ Examples
 
 ---
 
-## Attribute-Based Access Control (ABAC)
+### Attribute-Based Access Control (ABAC)
 
 Access depends on:
 
@@ -772,7 +772,7 @@ Current Time < 6 PM
 
 ---
 
-## Access Control List (ACL)
+### Access Control List (ACL)
 
 Permissions are attached directly to resources.
 
@@ -796,7 +796,7 @@ User C → Owner
 
 A recommended progression for mastering system design.
 
-## Phase 1 — Foundations
+### Phase 1 — Foundations
 
 - HTTP
 - DNS
@@ -807,7 +807,7 @@ A recommended progression for mastering system design.
 
 ---
 
-## Phase 2 — Backend Design
+### Phase 2 — Backend Design
 
 - REST APIs
 - GraphQL
@@ -818,7 +818,7 @@ A recommended progression for mastering system design.
 
 ---
 
-## Phase 3 — Scalability
+### Phase 3 — Scalability
 
 - Load Balancers
 - Horizontal Scaling
@@ -829,7 +829,7 @@ A recommended progression for mastering system design.
 
 ---
 
-## Phase 4 — Cloud Platforms
+### Phase 4 — Cloud Platforms
 
 Learn one major cloud platform deeply.
 
@@ -850,7 +850,7 @@ Topics
 
 ---
 
-## Phase 5 — Advanced System Design
+### Phase 5 — Advanced System Design
 
 - CAP Theorem
 - Consistency Models

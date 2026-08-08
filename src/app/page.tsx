@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -11,10 +12,46 @@ import { ArrowRight, Terminal, Cpu, Download, Server, ShieldCheck, ExternalLink 
 import { HeroThreeCanvas } from '@/components/three/HeroThreeCanvas';
 import { ContactForm } from '@/components/sections/ContactForm';
 import { SpiderWebOverlay } from '@/components/ui/SpiderWebOverlay';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { seoConfig } from '@/lib/seo';
+
+export const metadata: Metadata = {
+  title: "Yogesh Tandan | Software Engineer & Multi-Tenant SaaS Developer",
+  description: "Portfolio of Yogesh Tandan — Software Engineer at eigenstudio specializing in Next.js multi-tenant SaaS, WebGL 3D rendering engines (~60% speedup), and AWS/Terraform CI/CD pipelines.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Yogesh Tandan | Software Engineer & Multi-Tenant SaaS Developer",
+    description: "Portfolio of Yogesh Tandan — Software Engineer at eigenstudio specializing in Next.js multi-tenant SaaS, WebGL 3D rendering engines (~60% speedup), and AWS/Terraform CI/CD pipelines.",
+    url: seoConfig.siteUrl,
+  },
+};
 
 export default function HomePage() {
   const projects = getAllProjects().slice(0, 4); // Top featured projects
   const blogPosts = getAllBlogPosts().slice(0, 3); // Top 3 blog posts
+
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": seoConfig.authorName,
+    "url": seoConfig.siteUrl,
+    "jobTitle": seoConfig.jobTitle,
+    "worksFor": {
+      "@type": "Organization",
+      "name": seoConfig.company,
+    },
+    "alumniOf": {
+      "@type": "Organization",
+      "name": seoConfig.previousCompany,
+    },
+    "sameAs": [
+      seoConfig.socialLinks.github,
+      seoConfig.socialLinks.linkedin,
+      seoConfig.socialLinks.twitter,
+    ],
+  };
 
   const cloudHighlights = [
     { name: 'AWS Cloud Services', desc: 'EC2, ECS Fargate, API Gateway, WAF, Cognito, DynamoDB' },
@@ -25,6 +62,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <JsonLd data={personJsonLd} />
       <SpiderWebOverlay />
       <Header />
 
