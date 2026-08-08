@@ -1,14 +1,48 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { getAllBlogPosts } from '@/lib/content';
 import { BlogList } from './BlogList';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { seoConfig } from '@/lib/seo';
+
+export const metadata: Metadata = {
+  title: "Daily Planet Newsroom & Technical Chronicles — Yogesh Tandan",
+  description: "Read software engineering articles on System Design, Automation, WebGL 3D Physics, Next.js, and AWS DevOps written by Yogesh Tandan.",
+  alternates: {
+    canonical: "/blog",
+  },
+  openGraph: {
+    title: "Daily Planet Newsroom & Technical Chronicles — Yogesh Tandan",
+    description: "Read software engineering articles on System Design, Automation, WebGL 3D Physics, Next.js, and AWS DevOps written by Yogesh Tandan.",
+    url: `${seoConfig.siteUrl}/blog`,
+  },
+};
 
 export default function BlogPage() {
   const posts = getAllBlogPosts();
 
+  const collectionJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Daily Planet Newsroom & Technical Chronicles",
+    "description": "Engineering articles and software architecture guides by Yogesh Tandan.",
+    "url": `${seoConfig.siteUrl}/blog`,
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": posts.map((p, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "url": `${seoConfig.siteUrl}/blog/${p.slug}`,
+        "name": p.title,
+      })),
+    },
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <JsonLd data={collectionJsonLd} />
       <Header />
 
       <main className="flex-grow py-12 bg-halftone">

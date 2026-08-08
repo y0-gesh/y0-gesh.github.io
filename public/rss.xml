@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Yogesh Tandan Chronicles &amp; Daily Planet Newsroom</title>
+    <link>https://y0-gesh.github.io</link>
+    <description>Technical articles on System Design, Automation, WebGL 3D Physics, Next.js, and AWS DevOps by Yogesh Tandan.</description>
+    <language>en-us</language>
+    <atom:link href="https://y0-gesh.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title><![CDATA[Desktop Application Security, Packaging & Architecture: A Production Guide]]></title>
+      <link>https://y0-gesh.github.io/blog/desktop-application-packaging</link>
+      <guid isPermaLink="true">https://y0-gesh.github.io/blog/desktop-application-packaging</guid>
+      <pubDate>Sat, 08 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Learn how to design secure, production-ready desktop applications using Electron, Python, Docker, and native compiled modules. This guide covers architecture, packaging, security hardening, licensing, and deployment best practices.]]></description>
+      <category>System Design</category>
+    </item>
+    <item>
+      <title><![CDATA[Add "Open in Antigravity IDE" to Finder on macOS]]></title>
+      <link>https://y0-gesh.github.io/blog/open-app-using-quick_action-in-finder</link>
+      <guid isPermaLink="true">https://y0-gesh.github.io/blog/open-app-using-quick_action-in-finder</guid>
+      <pubDate>Sat, 01 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Learn how to add an "Open in Antigravity IDE" option to the Finder context menu using Automator.]]></description>
+      <category>Automation</category>
+    </item>
+    <item>
+      <title><![CDATA[Mastering System Design: From Foundations to Advanced Architecture]]></title>
+      <link>https://y0-gesh.github.io/blog/system-design</link>
+      <guid isPermaLink="true">https://y0-gesh.github.io/blog/system-design</guid>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A structured roadmap for mastering system design, covering architecture fundamentals, scalability, API design, databases, networking, security, and distributed systems. This guide is intended for developers transitioning from mid-level to senior engineering roles.]]></description>
+      <category>Learn</category>
+    </item>
+    <item>
+      <title><![CDATA[Managing Multiple GitHub Accounts on a Single Mac with Automatic Git Identity Switching]]></title>
+      <link>https://y0-gesh.github.io/blog/managing-multiple-github-account</link>
+      <guid isPermaLink="true">https://y0-gesh.github.io/blog/managing-multiple-github-account</guid>
+      <pubDate>Thu, 11 Jun 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Learn how to manage personal and work GitHub accounts on the same macOS or Linux machine using SSH keys, host aliases, and Git's includeIf configuration for automatic identity switching.]]></description>
+      <category>Development</category>
+    </item>
+    <item>
+      <title><![CDATA[Building 3D Physics for the Web]]></title>
+      <link>https://y0-gesh.github.io/blog/building-3d-physics-for-web</link>
+      <guid isPermaLink="true">https://y0-gesh.github.io/blog/building-3d-physics-for-web</guid>
+      <pubDate>Sat, 30 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How to integrate performant rigid body dynamics in browser environments using Rapier and Three.js.]]></description>
+      <category>Web3D</category>
+    </item>
+    <item>
+      <title><![CDATA[Why Every Portfolio Needs a Strong Theme]]></title>
+      <link>https://y0-gesh.github.io/blog/why-every-portfolio-needs-theme</link>
+      <guid isPermaLink="true">https://y0-gesh.github.io/blog/why-every-portfolio-needs-theme</guid>
+      <pubDate>Sun, 10 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Ditching generic landing pages for immersive, interactive storytelling that captivates recruiters.]]></description>
+      <category>Design</category>
+    </item>
+    <item>
+      <title><![CDATA[Crafting Expressive CSS Effects]]></title>
+      <link>https://y0-gesh.github.io/blog/crafting-expressive-css-effects</link>
+      <guid isPermaLink="true">https://y0-gesh.github.io/blog/crafting-expressive-css-effects</guid>
+      <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How to use clipping paths, custom radial gradients, and weathering masks for retro graphic novel layouts.]]></description>
+      <category>CSS</category>
+    </item>
+  </channel>
+</rss>

@@ -1,14 +1,48 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { getAllProjects } from '@/lib/content';
 import { ProjectsList } from './ProjectsList';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { seoConfig } from '@/lib/seo';
+
+export const metadata: Metadata = {
+  title: "Project Database & Engineering Missions — Yogesh Tandan",
+  description: "Explore engineering case studies, multi-tenant SaaS applications, WebGL 3D rendering engines, and AWS/Terraform infrastructure projects built by Yogesh Tandan.",
+  alternates: {
+    canonical: "/projects",
+  },
+  openGraph: {
+    title: "Project Database & Engineering Missions — Yogesh Tandan",
+    description: "Explore engineering case studies, multi-tenant SaaS applications, WebGL 3D rendering engines, and AWS/Terraform infrastructure projects built by Yogesh Tandan.",
+    url: `${seoConfig.siteUrl}/projects`,
+  },
+};
 
 export default function ProjectsPage() {
   const projects = getAllProjects();
 
+  const collectionJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Project Database & Engineering Missions",
+    "description": "Software engineering case studies, 3D web engines, and cloud infrastructure projects by Yogesh Tandan.",
+    "url": `${seoConfig.siteUrl}/projects`,
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": projects.map((p, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "url": `${seoConfig.siteUrl}/projects/${p.slug}`,
+        "name": p.title,
+      })),
+    },
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <JsonLd data={collectionJsonLd} />
       <Header />
 
       <main className="flex-grow py-12 bg-halftone">

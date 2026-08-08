@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://y0-gesh.github.io/sitemap.xml

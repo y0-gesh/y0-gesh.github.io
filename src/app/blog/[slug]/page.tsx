@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
@@ -7,12 +8,66 @@ import { ComicPanel } from "@/components/ui/ComicPanel";
 import { ComicButton } from "@/components/ui/ComicButton";
 import { NarratorBox } from "@/components/ui/NarratorBox";
 import { TableOfContents } from "@/components/blog/TableOfContents";
-import { getBlogPostBySlug, getAllBlogPosts } from "@/lib/content";
-import { ArrowLeft, Calendar, Clock } from "lucide-react";
+import { getBlogPostBySlug, getAllBlogPosts, getRelatedBlogPosts } from "@/lib/content";
+import { ArrowLeft, Calendar, Clock, BookOpen, Tag } from "lucide-react";
 import CodeBlockCopy from "@/components/sections/CodeBlockCopy";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { seoConfig } from "@/lib/seo";
 
 interface BlogDetailPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: BlogDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getBlogPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: "Article Not Found",
+    };
+  }
+
+  const rawDescription = post.description || post.title;
+  const description = rawDescription.length > 155
+    ? `${rawDescription.slice(0, 152)}...`
+    : rawDescription;
+
+  const canonicalUrl = `/blog/${post.slug}`;
+  const ogImage = post.coverImage && post.coverImage !== "/placeholder.jpg"
+    ? `${seoConfig.siteUrl}${post.coverImage}`
+    : seoConfig.defaultOgImage;
+
+  return {
+    title: post.title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: post.title,
+      description,
+      url: `${seoConfig.siteUrl}/blog/${post.slug}`,
+      type: "article",
+      publishedTime: post.date,
+      authors: [seoConfig.authorName],
+      tags: post.tags,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description,
+      images: [ogImage],
+    },
+  };
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
@@ -30,8 +85,44 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const nextPost =
     currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 
+  // Related articles
+  const relatedPosts = getRelatedBlogPosts(slug, post.category, 3);
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.description,
+    "image": post.coverImage && post.coverImage !== "/placeholder.jpg"
+      ? `${seoConfig.siteUrl}${post.coverImage}`
+      : seoConfig.defaultOgImage,
+    "datePublished": post.date,
+    "dateModified": post.date,
+    "author": {
+      "@type": "Person",
+      "name": seoConfig.authorName,
+      "url": seoConfig.siteUrl,
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": seoConfig.siteName,
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${seoConfig.siteUrl}/images/blog-3.png`,
+      },
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `${seoConfig.siteUrl}/blog/${post.slug}`,
+    },
+    "keywords": [post.category, ...post.tags].join(", "),
+  };
+
+  const categorySlug = post.category.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+
   return (
     <div className="min-h-screen flex flex-col bg-background relative">
+      <JsonLd data={articleJsonLd} />
       {/* Scroll Reading Progress Bar */}
       <div
         id="reading-progress"
@@ -75,9 +166,12 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
             <div className="p-6 md:p-8">
               <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
-                <div className="bg-accent text-accent-foreground border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase shadow-comic-sm">
-                  {post.category}
-                </div>
+                <Link
+                  href={`/blog/category/${categorySlug}`}
+                  className="bg-accent hover:bg-primary hover:text-white transition-colors text-accent-foreground border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase shadow-comic-sm flex items-center gap-1"
+                >
+                  <Tag size={12} /> {post.category}
+                </Link>
 
                 <div className="flex items-center gap-4 text-xs font-bold text-muted-foreground">
                   <span className="flex items-center gap-1">
@@ -140,6 +234,39 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </div>
             </div>
           </div>
+
+          {/* Related Articles Section */}
+          {relatedPosts.length > 0 && (
+            <div className="mb-12 border-t-3 border-border-color pt-10">
+              <div className="flex items-center gap-2 mb-6">
+                <BookOpen className="text-primary" size={24} />
+                <h3 className="font-comic-header text-3xl uppercase text-foreground">
+                  Related Chronicles ({post.category})
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {relatedPosts.map((relPost) => (
+                  <Link
+                    key={relPost.slug}
+                    href={`/blog/${relPost.slug}`}
+                    className="group"
+                  >
+                    <ComicPanel skewAngle="none" className="h-full bg-panel-bg p-5 hover:bg-accent/20 transition-colors">
+                      <span className="text-[10px] font-comic-title uppercase bg-primary text-white px-2 py-0.5 border border-border-color inline-block mb-2">
+                        {relPost.category}
+                      </span>
+                      <h4 className="font-comic-header text-lg uppercase text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
+                        {relPost.title}
+                      </h4>
+                      <p className="text-xs font-semibold text-muted-foreground line-clamp-2">
+                        {relPost.description}
+                      </p>
+                    </ComicPanel>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Navigation links */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t-3 border-border-color pt-12">
