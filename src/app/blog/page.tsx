@@ -17,6 +17,21 @@ export const metadata: Metadata = {
     title: "Daily Planet Newsroom & Technical Chronicles — Yogesh Tandan",
     description: "Read software engineering articles on System Design, Automation, WebGL 3D Physics, Next.js, and AWS DevOps written by Yogesh Tandan.",
     url: `${seoConfig.siteUrl}/blog`,
+    siteName: seoConfig.siteName,
+    images: [
+      {
+        url: seoConfig.defaultOgImage,
+        width: 1200,
+        height: 630,
+        alt: "Daily Planet Newsroom - Yogesh Tandan",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Daily Planet Newsroom & Technical Chronicles — Yogesh Tandan",
+    description: "Read software engineering articles on System Design, Automation, WebGL 3D Physics, Next.js, and AWS DevOps written by Yogesh Tandan.",
+    images: [seoConfig.defaultOgImage],
   },
 };
 

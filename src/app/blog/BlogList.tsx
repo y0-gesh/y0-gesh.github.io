@@ -14,6 +14,8 @@ interface BlogListProps {
 export function BlogList({ initialPosts }: BlogListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
+  const POSTS_PER_PAGE = 6;
 
   // Memoize all categories
   const categories = useMemo(() => {
@@ -21,6 +23,17 @@ export function BlogList({ initialPosts }: BlogListProps) {
     initialPosts.forEach((p) => list.add(p.category.toUpperCase()));
     return ['ALL', ...Array.from(list)];
   }, [initialPosts]);
+
+  // Reset page on filter changes
+  const handleCategoryChange = (cat: string) => {
+    setSelectedCategory(cat);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
 
   // Filtering Logic
   const filteredPosts = useMemo(() => {
@@ -41,6 +54,13 @@ export function BlogList({ initialPosts }: BlogListProps) {
   const featuredPost = filteredPosts[0];
   const listPosts = filteredPosts.slice(1);
 
+  // Pagination calculation for listPosts
+  const totalPages = Math.ceil(listPosts.length / POSTS_PER_PAGE);
+  const paginatedListPosts = useMemo(() => {
+    const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+    return listPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+  }, [listPosts, currentPage]);
+
   return (
     <div className="flex flex-col gap-10">
       
@@ -53,7 +73,7 @@ export function BlogList({ initialPosts }: BlogListProps) {
             type="text"
             placeholder="Search chronicles..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="w-full border-2 border-border-color p-2 pl-9 bg-background focus:outline-none focus:bg-accent font-semibold placeholder-muted-foreground/60 shadow-comic-md text-sm"
           />
           <Search size={16} className="absolute left-3 top-3 text-muted-foreground" />
@@ -64,7 +84,7 @@ export function BlogList({ initialPosts }: BlogListProps) {
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => handleCategoryChange(cat)}
               className={`
                 px-3 py-1.5 border-2 border-border-color text-xs font-comic-title tracking-wider uppercase shadow-comic-md transition-transform duration-100 cursor-pointer active:scale-95
                 ${selectedCategory === cat ? 'bg-secondary text-secondary-foreground' : 'bg-panel-bg hover:bg-muted text-foreground'}
@@ -82,7 +102,7 @@ export function BlogList({ initialPosts }: BlogListProps) {
         <div className="flex flex-col gap-10">
           
           {/* 1. Featured Big Story Column (only if no category has deleted it) */}
-          {featuredPost && (
+          {featuredPost && currentPage === 1 && (
             <div className="border-3 border-border-color bg-panel-bg shadow-comic p-6 relative overflow-hidden bg-halftone">
               <div className="absolute top-4 left-4 bg-primary text-white border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase z-10 shadow-comic-md">
                 Featured Editorial
@@ -148,9 +168,9 @@ export function BlogList({ initialPosts }: BlogListProps) {
           )}
 
           {/* 2. Smaller multi-column entries list */}
-          {listPosts.length > 0 && (
+          {paginatedListPosts.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {listPosts.map((post) => (
+              {paginatedListPosts.map((post) => (
                 <ComicPanel key={post.slug} className="flex flex-col h-full bg-panel-bg hover:-translate-y-1 transition-transform overflow-hidden !p-0">
                   {/* Illustration Block Container */}
                   <div className="relative aspect-video w-full border-b-3 border-border-color overflow-hidden bg-muted group">
@@ -198,6 +218,46 @@ export function BlogList({ initialPosts }: BlogListProps) {
                   </div>
                 </ComicPanel>
               ))}
+            </div>
+          )}
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-3 pt-6 border-t-3 border-border-color">
+              <ComicButton
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}
+              >
+                ← Previous
+              </ComicButton>
+
+              <div className="flex gap-2">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                  <button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`
+                      w-9 h-9 border-2 border-border-color text-xs font-comic-title font-bold shadow-comic-sm transition-transform active:scale-95 cursor-pointer
+                      ${currentPage === pageNum ? 'bg-primary text-white' : 'bg-panel-bg hover:bg-muted text-foreground'}
+                    `}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
+              </div>
+
+              <ComicButton
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className={currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}
+              >
+                Next →
+              </ComicButton>
             </div>
           )}
 

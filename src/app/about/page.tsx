@@ -21,6 +21,21 @@ export const metadata: Metadata = {
     title: "Origin Story — Yogesh Tandan, Software Engineer",
     description: "The origin story, technical powers, engineering background, and experience of Yogesh Tandan — Software Engineer at eigenstudio specializing in Next.js multi-tenant SaaS, WebGL 3D rendering engines, and AWS/Terraform DevOps.",
     url: `${seoConfig.siteUrl}/about`,
+    siteName: seoConfig.siteName,
+    images: [
+      {
+        url: seoConfig.defaultOgImage,
+        width: 1200,
+        height: 630,
+        alt: "Origin Story - Yogesh Tandan",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Origin Story — Yogesh Tandan, Software Engineer",
+    description: "The origin story, technical powers, engineering background, and experience of Yogesh Tandan — Software Engineer at eigenstudio specializing in Next.js multi-tenant SaaS, WebGL 3D rendering engines, and AWS/Terraform DevOps.",
+    images: [seoConfig.defaultOgImage],
   },
 };
 
