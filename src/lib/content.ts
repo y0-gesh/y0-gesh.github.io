@@ -92,6 +92,12 @@ export function parseMarkdownContent(rawMarkdown: string): { contentHtml: string
         const id = slugifyRender(text);
         return `<h${depth} id="${id}">${text}</h${depth}>\n`;
       },
+      link({ href, title, text }) {
+        const isExternal = href.startsWith("http://") || href.startsWith("https://") || href.startsWith("//");
+        const targetAttr = isExternal ? ' target="_blank" rel="noopener noreferrer"' : "";
+        const titleAttr = title ? ` title="${title}"` : "";
+        return `<a href="${href}"${titleAttr}${targetAttr}>${text}</a>`;
+      },
     },
   });
 

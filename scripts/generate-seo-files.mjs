@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
-const SITE_URL = 'https://y0-gesh.github.io';
+const SITE_URL = 'https://yogeshtandan.in';
 const cwd = process.cwd();
 const contentDir = path.join(cwd, 'content');
 const publicDir = path.join(cwd, 'public');

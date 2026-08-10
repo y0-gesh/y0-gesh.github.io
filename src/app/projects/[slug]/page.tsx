@@ -136,6 +136,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                     space-y-6
                     [&>h2]:font-comic-header [&>h2]:text-3xl [&>h2]:uppercase [&>h2]:text-secondary [&>h2]:mt-8 [&>h2]:mb-3 [&>h2]:border-b-2 [&>h2]:border-border-color [&>h2]:pb-1
                     [&>h3]:font-comic-title [&>h3]:text-xl [&>h3]:uppercase [&>h3]:text-primary [&>h3]:mt-6 [&>h3]:mb-2
+                    [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_a]:font-bold [&_a:hover]:text-secondary transition-colors
                     [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-2
                     [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-2
                     [&>hr]:border-t-2 [&>hr]:border-border-color [&>hr]:my-6
