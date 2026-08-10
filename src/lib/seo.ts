@@ -1,6 +1,6 @@
 export const seoConfig = {
   siteName: "Yogesh Tandan | Software Engineering Portfolio",
-  siteUrl: "https://y0-gesh.github.io",
+  siteUrl: "https://yogeshtandan.in",
   defaultTitle: "Yogesh Tandan | Software Engineer & Multi-Tenant SaaS Developer",
   titleTemplate: "%s | Yogesh Tandan",
   defaultDescription:
@@ -10,7 +10,7 @@ export const seoConfig = {
   company: "eigenstudio",
   previousCompany: "Avkalan Labs",
   twitterHandle: "@y0_gesh_",
-  defaultOgImage: "https://y0-gesh.github.io/images/blog-3.png",
+  defaultOgImage: "https://yogeshtandan.in/images/blog-3.png",
   socialLinks: {
     github: "https://github.com/y0-gesh",
     linkedin: "https://www.linkedin.com/in/yogesh-tandan",
