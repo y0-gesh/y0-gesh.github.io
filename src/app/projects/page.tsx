@@ -17,6 +17,21 @@ export const metadata: Metadata = {
     title: "Project Database & Engineering Missions — Yogesh Tandan",
     description: "Explore engineering case studies, multi-tenant SaaS applications, WebGL 3D rendering engines, and AWS/Terraform infrastructure projects built by Yogesh Tandan.",
     url: `${seoConfig.siteUrl}/projects`,
+    siteName: seoConfig.siteName,
+    images: [
+      {
+        url: seoConfig.defaultOgImage,
+        width: 1200,
+        height: 630,
+        alt: "Project Database - Yogesh Tandan",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Project Database & Engineering Missions — Yogesh Tandan",
+    description: "Explore engineering case studies, multi-tenant SaaS applications, WebGL 3D rendering engines, and AWS/Terraform infrastructure projects built by Yogesh Tandan.",
+    images: [seoConfig.defaultOgImage],
   },
 };
 

@@ -25,6 +25,21 @@ export const metadata: Metadata = {
     title: "Yogesh Tandan | Software Engineer & Multi-Tenant SaaS Developer",
     description: "Portfolio of Yogesh Tandan — Software Engineer at eigenstudio specializing in Next.js multi-tenant SaaS, WebGL 3D rendering engines (~60% speedup), and AWS/Terraform CI/CD pipelines.",
     url: seoConfig.siteUrl,
+    siteName: seoConfig.siteName,
+    images: [
+      {
+        url: seoConfig.defaultOgImage,
+        width: 1200,
+        height: 630,
+        alt: "Yogesh Tandan - Software Engineering Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yogesh Tandan | Software Engineer & Multi-Tenant SaaS Developer",
+    description: "Portfolio of Yogesh Tandan — Software Engineer at eigenstudio specializing in Next.js multi-tenant SaaS, WebGL 3D rendering engines (~60% speedup), and AWS/Terraform CI/CD pipelines.",
+    images: [seoConfig.defaultOgImage],
   },
 };
 
