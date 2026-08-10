@@ -205,7 +205,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                     [&>h2]:font-comic-header [&>h2]:text-3xl [&>h2]:uppercase [&>h2]:text-secondary [&>h2]:mt-8 [&>h2]:mb-2 [&>h2]:border-b-2 [&>h2]:border-border-color [&>h2]:pb-1 [&>h2]:scroll-mt-24
                     [&>h3]:font-comic-title [&>h3]:text-xl [&>h3]:uppercase [&>h3]:text-foreground [&>h3]:mt-6 [&>h3]:mb-1 [&>h3]:scroll-mt-24
                     [&>p>strong]:text-primary [&>p>strong]:font-extrabold
-                    [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_a]:font-bold hover:[&_a]:text-secondary transition-colors
+                    [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_a]:font-bold [&_a:hover]:text-secondary transition-colors
                     [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1.5
                     [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1.5
                     [&>blockquote]:border-l-4 [&>blockquote]:border-primary [&>blockquote]:bg-muted [&>blockquote]:px-4 [&>blockquote]:py-2 [&>blockquote]:font-semibold [&>blockquote]:italic
