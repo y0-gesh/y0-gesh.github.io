@@ -123,7 +123,7 @@ export function BlogList({ initialPosts }: BlogListProps) {
                         <span className="text-[10px] font-comic-title uppercase bg-accent text-accent-foreground border border-border-color px-2 py-0.5 w-fit mb-1.5 shadow-comic-sm">
                           {featuredPost.category}
                         </span>
-                        <h3 className="font-comic-header text-xl sm:text-2xl uppercase text-white tracking-wide leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                        <h3 className="hidden md:block font-comic-header text-xl sm:text-2xl uppercase text-white tracking-wide leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                           <Link href={`/blog/${featuredPost.slug}`}>{featuredPost.title}</Link>
                         </h3>
                       </div>
