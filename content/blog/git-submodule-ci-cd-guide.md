@@ -594,7 +594,7 @@ If the build cannot find files under:
 src/contents/blogs
 ```
 
-verify that the workflow contains:
+*verify that the workflow contains:*
 
 ``` bash
 git submodule update --init --recursive
