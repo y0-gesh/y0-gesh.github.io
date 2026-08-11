@@ -20,7 +20,10 @@ export function WebShooterListener() {
   const [shots, setShots] = useState<WebShot[]>([]);
 
   useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
+    const handleClick = (e: PointerEvent) => {
+      // Only fire for main/left click (button === 0). Ignore right-click (2), middle-click (1), back/forward (3,4), etc.
+      if (e.button !== 0) return;
+
       // Don't trigger if user is selecting text
       const selection = window.getSelection();
       if (selection && selection.toString().length > 0) return;
