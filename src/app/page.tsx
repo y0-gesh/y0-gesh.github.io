@@ -1,8 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 import { ComicPanel } from '@/components/ui/ComicPanel';
 import { NarratorBox } from '@/components/ui/NarratorBox';
 import { SoundEffectBadge } from '@/components/ui/SoundEffectBadge';
@@ -79,7 +77,6 @@ export default function HomePage() {
     <div className="min-h-screen flex flex-col bg-background">
       <JsonLd data={personJsonLd} />
       <SpiderWebOverlay />
-      <Header />
 
       <main className="grow">
         {/* HERO SECTION */}
@@ -432,8 +429,6 @@ export default function HomePage() {
         </section>
 
       </main>
-
-      <Footer />
     </div>
   );
 }

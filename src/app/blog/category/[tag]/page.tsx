@@ -2,8 +2,6 @@ import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { BlogList } from "@/components/blog/BlogList";
 import { getAllCategories, getBlogPostsByCategory } from "@/lib/content";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -86,7 +84,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <JsonLd data={collectionJsonLd} />
-      <Header />
 
       <main className="flex-grow py-12 bg-halftone">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -123,8 +120,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <BlogList initialPosts={posts} />
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

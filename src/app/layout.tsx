@@ -84,6 +84,9 @@ export const metadata: Metadata = {
   },
 };
 
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -106,7 +109,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col paper-texture bg-background text-foreground transition-colors duration-300">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <WebShooterListener />
+          <Header />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

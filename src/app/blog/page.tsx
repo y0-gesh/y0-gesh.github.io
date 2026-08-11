@@ -1,7 +1,5 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { getAllBlogPosts } from "@/lib/content";
 import { BlogList } from "../../components/blog/BlogList";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -62,7 +60,6 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <JsonLd data={collectionJsonLd} />
-      <Header />
 
       <main className="flex-grow py-12 bg-halftone">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -85,8 +82,6 @@ export default function BlogPage() {
           <BlogList initialPosts={posts} />
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

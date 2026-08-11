@@ -1,7 +1,5 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 import { ComicPanel } from '@/components/ui/ComicPanel';
 import { NarratorBox } from '@/components/ui/NarratorBox';
 import { SoundEffectBadge } from '@/components/ui/SoundEffectBadge';
@@ -104,7 +102,6 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <JsonLd data={personJsonLd} />
-      <Header />
 
       <main className="grow py-12 bg-halftone">
         <div className="max-w-4xl mx-auto px-4 md:px-8">
@@ -384,8 +381,6 @@ export default function AboutPage() {
 
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
