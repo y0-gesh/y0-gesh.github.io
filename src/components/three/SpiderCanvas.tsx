@@ -125,13 +125,54 @@ export function SpiderCanvas({ isPulled, onPullToggle }: SpiderCanvasProps) {
     };
   }, []);
 
+  // Drag / Pull gesture state
+  const [dragY, setDragY] = useState(0);
+  const isDraggingRef = useRef(false);
+  const startYRef = useRef(0);
+  const currentDragYRef = useRef(0);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDraggingRef.current = true;
+    startYRef.current = e.clientY;
+    currentDragYRef.current = 0;
+    setDragY(0);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    const deltaY = Math.max(0, Math.min(e.clientY - startYRef.current, 75)); // Only pull downward up to 75px
+    currentDragYRef.current = deltaY;
+    setDragY(deltaY);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    
+    // Threshold of 25px downward pull to activate toggle
+    if (currentDragYRef.current >= 25) {
+      onPullToggle();
+    }
+
+    setDragY(0);
+    currentDragYRef.current = 0;
+    try {
+      (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {}
+  };
+
+  const currentTranslateY = isPulled ? 40 : dragY;
+
   return (
     <div
-      onClick={onPullToggle}
-      className={`relative cursor-pointer transition-transform duration-300 active:scale-95 group ${
-        isPulled ? 'translate-y-8' : 'translate-y-0'
-      }`}
-      title="Pull Spider to toggle Web Shooter ON/OFF"
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      style={{ transform: `translateY(${currentTranslateY}px)` }}
+      className="relative cursor-grab active:cursor-grabbing transition-transform duration-100 ease-out select-none group"
+      title="Pull Spider downward to toggle Web Shooter ON/OFF"
     >
       {/* 3D Canvas */}
       <div ref={containerRef} className="w-[120px] h-[180px] flex items-center justify-center -mt-6">
