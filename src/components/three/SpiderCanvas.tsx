@@ -69,8 +69,9 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
         const scale = 1.9 / (maxDim || 1);
         model.scale.set(scale, scale, scale);
 
-        // Position spider in canvas
+        // Position spider in canvas & rotate so head points downwards hanging from web line
         model.position.set(0, 0, 0);
+        model.rotation.x = Math.PI / 2; // Head pointing downwards
 
         const group = new THREE.Group();
         group.add(model);
@@ -92,7 +93,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
       const elapsedTime = clock.getElapsedTime();
 
       if (spiderGroupRef.current) {
-        // Gentle dangling sway animation
+        // Gentle dangling sway animation anchored to hanging spider
         spiderGroupRef.current.rotation.z = Math.sin(elapsedTime * 1.6) * 0.12;
         spiderGroupRef.current.rotation.y = Math.cos(elapsedTime * 1.2) * 0.15;
       }
@@ -214,52 +215,42 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
       className="fixed top-0 right-6 sm:right-16 z-999999 flex flex-col items-center pointer-events-none select-none"
       style={{ height: `${DEFAULT_LENGTH + 180}px` }}
     >
-      {/* Spider Web Strand SVG */}
+      {/* Spider Web Silk Strand SVG */}
       <svg
         width="60"
         height={currentWebLength + 90}
-        className="overflow-visible filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]"
+        className="overflow-visible pointer-events-none"
       >
         <defs>
-          <filter id="spider-web-glow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#000000" floodOpacity="0.8" />
+          {/* Soft Silk Web Glow */}
+          <filter id="silk-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="1" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
         </defs>
 
-        {/* Top Ceiling Anchor Web Plate */}
-        <circle cx="30" cy="4" r="5" fill="#ffffff" stroke="#0f172a" strokeWidth="2" />
-
-        {/* Outer Dark Comic Outline Web Cord Line */}
+        {/* Outer Glow Backing */}
         <path
-          d={`M 30,4 L 30,${currentWebLength}`}
-          fill="none"
-          stroke="#0f172a"
-          strokeWidth="4.5"
-          strokeLinecap="round"
-        />
-
-        {/* Main Spider-Man Pure White Web Strand Line */}
-        <path
-          d={`M 30,4 L 30,${currentWebLength}`}
+          d={`M 30,0 L 30,${currentWebLength}`}
           fill="none"
           stroke="#ffffff"
-          strokeWidth="2.8"
-          strokeDasharray={isEnabled ? 'none' : '5,3'}
-          strokeLinecap="round"
+          strokeWidth="3"
+          strokeOpacity="0.4"
+          filter="url(#silk-glow)"
         />
 
-        {/* Secondary web spiral texture nodes for authentic spider web look */}
-        <circle cx="30" cy={currentWebLength * 0.35} r="2" fill="#ffffff" stroke="#0f172a" strokeWidth="1" />
-        <circle cx="30" cy={currentWebLength * 0.7} r="2" fill="#ffffff" stroke="#0f172a" strokeWidth="1" />
-
-        {/* Web Attachment Node Knot */}
-        <circle
-          cx="30"
-          cy={currentWebLength}
-          r="4.5"
-          fill="#ffffff"
-          stroke="#0f172a"
-          strokeWidth="2"
+        {/* Pure White Silk Web Strand Line connecting directly to Spider */}
+        <path
+          d={`M 30,0 L 30,${currentWebLength}`}
+          fill="none"
+          stroke={isEnabled ? "#ffffff" : "#94a3b8"}
+          strokeWidth="1.8"
+          strokeDasharray={isEnabled ? "none" : "3,3"}
+          strokeOpacity="0.95"
+          strokeLinecap="round"
         />
       </svg>
 
