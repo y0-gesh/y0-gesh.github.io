@@ -97,8 +97,8 @@ export function WebShooterListener() {
   return (
     <>
       {/* Hanging Spider Pull Switch in Top Right Corner */}
-      <div className="fixed top-0 right-4 sm:right-12 z-999999 pointer-events-auto spider-toggle-container flex flex-col items-center">
-        <SpiderCanvas isPulled={isPulled} onPullToggle={handlePullToggle} />
+      <div className="spider-toggle-container">
+        <SpiderCanvas isEnabled={isEnabled} onPullToggle={handlePullToggle} />
       </div>
 
       {/* Center Screen Banner Notification (WEB SHOOTER ON / OFF) */}
