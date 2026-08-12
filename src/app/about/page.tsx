@@ -1,11 +1,10 @@
-import React from 'react';
 import type { Metadata } from 'next';
 import { ComicPanel } from '@/components/ui/ComicPanel';
 import { NarratorBox } from '@/components/ui/NarratorBox';
 import { SoundEffectBadge } from '@/components/ui/SoundEffectBadge';
 import { ComicButton } from '@/components/ui/ComicButton';
 import Link from 'next/link';
-import { Download, Server, Cpu, Layers, ShieldCheck, Terminal, ArrowRight, ExternalLink } from 'lucide-react';
+import { Download, Server, ShieldCheck } from 'lucide-react';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { seoConfig } from '@/lib/seo';
 
@@ -138,11 +137,11 @@ export default function AboutPage() {
               </div>
               
               <div className="md:col-span-8 order-1 md:order-3">
-                <ComicPanel skewAngle="right">
-                  <div className="absolute top-3 left-4 bg-primary text-white border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase tracking-wider">
-                    Status: Currently Active
+                <ComicPanel skewAngle="right" className='overflow-visible!'>
+                  <div className="absolute -top-10 left-4 inline-block bg-primary text-white border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase tracking-wider shadow-comic-sm mb-3">
+                    STATUS: ACTIVE
                   </div>
-                  <h3 className="font-comic-header text-2xl uppercase mt-8 mb-2 text-secondary">
+                  <h3 className="font-comic-header text-2xl uppercase mb-2 text-secondary">
                     Software Engineer @ <Link href="https://eigenstudio.com/" target="_blank" className='lowercase!'>eigenstudio</Link>
                   </h3>
                   <p className="text-xs md:text-sm font-semibold text-muted-foreground leading-relaxed mb-3">
@@ -161,11 +160,11 @@ export default function AboutPage() {
             {/* 2. EXPERIENCE LOG */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
               <div className="md:col-span-8 order-1">
-                <ComicPanel skewAngle="left">
-                  <div className="absolute top-3 left-4 bg-secondary text-white border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase tracking-wider">
-                    Mission Log: Experience
+                <ComicPanel skewAngle="left" className='overflow-visible!'>
+                  <div className="absolute -top-10 left-4 inline-block bg-secondary text-white border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase tracking-wider shadow-comic-sm mb-3">
+                    MISSION LOG: EXPERIENCE
                   </div>
-                  <h3 className="font-comic-header text-2xl uppercase mt-8 mb-4 text-primary">
+                  <h3 className="font-comic-header text-2xl uppercase mb-4 text-primary">
                     Professional Operations
                   </h3>
                   
@@ -243,11 +242,11 @@ export default function AboutPage() {
               </div>
 
               <div className="md:col-span-8 order-1 md:order-3">
-                <ComicPanel skewAngle="right">
-                  <div className="absolute top-3 left-4 bg-accent text-accent-foreground border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase tracking-wider">
-                    Academy: Education
+                <ComicPanel skewAngle="right" className='overflow-visible!'>
+                  <div className="absolute -top-10 left-4 inline-block bg-accent text-accent-foreground border-2 border-border-color px-2.5 py-0.5 text-xs font-comic-title uppercase tracking-wider shadow-comic-sm mb-3">
+                    ACADEMY: EDUCATION
                   </div>
-                  <h3 className="font-comic-header text-2xl uppercase mt-8 mb-2 text-secondary">
+                  <h3 className="font-comic-header text-2xl uppercase mb-2 text-secondary">
                     Engineering Credentials
                   </h3>
                   <p className="text-xs md:text-sm font-bold text-foreground leading-relaxed">

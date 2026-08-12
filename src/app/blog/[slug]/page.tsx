@@ -153,7 +153,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                   alt={post.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                   <h1 className="font-comic-header text-3xl sm:text-5xl uppercase text-white tracking-wide leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                     {post.title}
                   </h1>

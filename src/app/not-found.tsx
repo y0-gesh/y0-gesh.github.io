@@ -1,21 +1,12 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ComicPanel } from "@/components/ui/ComicPanel";
 import { ComicButton } from "@/components/ui/ComicButton";
-import { NarratorBox } from "@/components/ui/NarratorBox";
 import { SoundEffectBadge } from "@/components/ui/SoundEffectBadge";
 import { SpiderWebOverlay } from "@/components/ui/SpiderWebOverlay";
-import {
-  Home,
-  ArrowLeft,
-  Compass,
-  FolderGit2,
-  Newspaper,
-  ShieldAlert,
-} from "lucide-react";
+import { Home, ArrowLeft, ShieldAlert } from "lucide-react";
 
 export default function NotFound() {
   const router = useRouter();
