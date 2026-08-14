@@ -23,8 +23,9 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
   const didTriggerRef = useRef(false);
   const animFrameRef = useRef<number | null>(null);
 
-  const DEFAULT_LENGTH = 70; // Base hanging web length in px
+  const DEFAULT_LENGTH = 75; // Base hanging web length in px
   const THRESHOLD = 45;      // Pull distance to trigger toggle
+  const SILK_ATTACH_OFFSET = 20; // Exact pixel Y in canvas where silk connects to spider spinneret
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -33,8 +34,9 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
     const height = 140;
 
     const scene = new THREE.Scene();
+    // Camera positioned slightly below origin looking towards the spider hanging from y=0
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 4.2);
+    camera.position.set(0, -0.95, 3.6);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
@@ -52,6 +54,10 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
     pointLight.position.set(0, 1, 2);
     scene.add(pointLight);
 
+    const group = new THREE.Group();
+    scene.add(group);
+    spiderGroupRef.current = group;
+
     const loader = new GLTFLoader();
     loader.load(
       '/model/granny_spider.glb',
@@ -59,24 +65,29 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
         const model = gltf.scene;
 
         // Compute Bounding Box & Scale to fit nicely
-        const box = new THREE.Box3().setFromObject(model);
-        const size = box.getSize(new THREE.Vector3());
-        const center = box.getCenter(new THREE.Vector3());
-
-        model.position.sub(center); // Center geometry
-
+        const initialBox = new THREE.Box3().setFromObject(model);
+        const size = initialBox.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 1.9 / (maxDim || 1);
+        const scale = 1.85 / (maxDim || 1);
         model.scale.set(scale, scale, scale);
 
-        // Position spider in canvas & rotate so head points downwards hanging from web line
-        model.position.set(0, 0, 0);
-        model.rotation.x = Math.PI / 2; // Head pointing downwards
+        // Rotate so head points downwards hanging from web line
+        model.rotation.x = Math.PI / 2;
+        model.updateMatrixWorld(true);
 
-        const group = new THREE.Group();
+        // Calculate bounding box after scale and rotation
+        const rotatedBox = new THREE.Box3().setFromObject(model);
+        const rotatedCenter = rotatedBox.getCenter(new THREE.Vector3());
+
+        // Offset model inside group so its spinneret/top abdomen is precisely at (0, 0, 0)
+        // and centered along X and Z axes
+        model.position.set(
+          -rotatedCenter.x,
+          -rotatedBox.max.y + 0.1, // Top anchor point at local origin
+          -rotatedCenter.z
+        );
+
         group.add(model);
-        scene.add(group);
-        spiderGroupRef.current = group;
         setModelLoaded(true);
       },
       undefined,
@@ -86,16 +97,16 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
     );
 
     let animationFrameId: number;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
       if (spiderGroupRef.current) {
-        // Gentle dangling sway animation anchored to hanging spider
-        spiderGroupRef.current.rotation.z = Math.sin(elapsedTime * 1.6) * 0.12;
-        spiderGroupRef.current.rotation.y = Math.cos(elapsedTime * 1.2) * 0.15;
+        // Natural pendulum dangling sway anchored at the silk attachment point (0, 0, 0)
+        spiderGroupRef.current.rotation.z = Math.sin(elapsedTime * 1.5) * 0.08;
+        spiderGroupRef.current.rotation.y = Math.cos(elapsedTime * 1.1) * 0.12;
       }
 
       renderer.render(scene, camera);
@@ -209,22 +220,31 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
   };
 
   const currentWebLength = DEFAULT_LENGTH + y;
+  const webEndY = currentWebLength + SILK_ATTACH_OFFSET;
 
   return (
     <div
       className="fixed top-0 right-6 sm:right-16 z-999999 flex flex-col items-center pointer-events-none select-none"
-      style={{ height: `${DEFAULT_LENGTH + 180}px` }}
+      style={{ width: '120px', height: `${currentWebLength + 160}px` }}
     >
-      {/* Spider Web Silk Strand SVG */}
+      {/* Real Spider Web Silk Strand SVG */}
       <svg
-        width="60"
-        height={currentWebLength + 90}
-        className="overflow-visible pointer-events-none"
+        width="120"
+        height={webEndY + 20}
+        className="absolute top-0 left-0 overflow-visible pointer-events-none"
       >
         <defs>
-          {/* Soft Silk Web Glow */}
-          <filter id="silk-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="1" result="blur" />
+          {/* Subtle silk shimmer gradient */}
+          <linearGradient id="silk-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.75" />
+            <stop offset="30%" stopColor="#e2e8f0" stopOpacity="0.9" />
+            <stop offset="70%" stopColor="#ffffff" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="#cbd5e1" stopOpacity="0.8" />
+          </linearGradient>
+
+          {/* Delicate silk glow */}
+          <filter id="silk-micro-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="0.8" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -232,34 +252,63 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
           </filter>
         </defs>
 
-        {/* Outer Glow Backing */}
-        <path
-          d={`M 30,0 L 30,${currentWebLength}`}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="3"
-          strokeOpacity="0.4"
-          filter="url(#silk-glow)"
+        {/* Ceiling anchor dot */}
+        <circle cx="60" cy="1" r="1.5" fill="#ffffff" opacity="0.8" />
+
+        {/* Outer soft ambient silk glow */}
+        <line
+          x1="60"
+          y1="0"
+          x2="60"
+          y2={webEndY}
+          stroke={isEnabled ? "#ffffff" : "#94a3b8"}
+          strokeWidth="2.5"
+          strokeOpacity={isEnabled ? "0.2" : "0.1"}
+          filter="url(#silk-micro-glow)"
         />
 
-        {/* Pure White Silk Web Strand Line connecting directly to Spider */}
-        <path
-          d={`M 30,0 L 30,${currentWebLength}`}
-          fill="none"
-          stroke={isEnabled ? "#ffffff" : "#94a3b8"}
-          strokeWidth="1.8"
+        {/* Realistic Semi-Translucent Spider Web Silk Thread */}
+        <line
+          x1="60"
+          y1="0"
+          x2="60"
+          y2={webEndY}
+          stroke={isEnabled ? "url(#silk-grad)" : "#94a3b8"}
+          strokeWidth="1.1"
+          strokeOpacity={isEnabled ? "0.88" : "0.5"}
           strokeDasharray={isEnabled ? "none" : "3,3"}
-          strokeOpacity="0.95"
-          strokeLinecap="round"
+        />
+
+        {/* Ultra-fine bright specular highlight filament */}
+        {isEnabled && (
+          <line
+            x1="60"
+            y1="0"
+            x2="60"
+            y2={webEndY}
+            stroke="#ffffff"
+            strokeWidth="0.5"
+            strokeOpacity="0.95"
+          />
+        )}
+
+        {/* Silk attachment droplet on spider spinneret */}
+        <circle
+          cx="60"
+          cy={webEndY}
+          r="1.2"
+          fill="#ffffff"
+          opacity={isEnabled ? "0.85" : "0.4"}
         />
       </svg>
 
       {/* Interactive 3D Spider Container */}
       <div
-        className="pointer-events-auto cursor-grab active:cursor-grabbing absolute top-0 flex flex-col items-center group"
+        className="pointer-events-auto cursor-grab active:cursor-grabbing absolute top-0 left-0 flex flex-col items-center group"
         style={{
-          transform: `translateY(${currentWebLength - 10}px)`,
+          transform: `translateY(${currentWebLength}px)`,
           touchAction: 'none',
+          width: '120px',
         }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -268,12 +317,12 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
         title="Pull or click Spider to toggle Web Shooter ON/OFF"
       >
         {/* Expanded touch target for easy grabbing */}
-        <div className="absolute inset-0 -m-4 rounded-full cursor-grab active:cursor-grabbing"></div>
+        <div className="absolute inset-0 -m-3 rounded-full cursor-grab active:cursor-grabbing"></div>
 
         {/* 3D Canvas */}
-        <div ref={containerRef} className="w-[120px] h-[140px] flex items-center justify-center -mt-4">
+        <div ref={containerRef} className="w-[120px] h-[140px] flex items-center justify-center">
           {!modelLoaded && (
-            <div className="w-0.5 h-16 bg-white/80 animate-pulse"></div>
+            <div className="w-0.5 h-16 bg-white/60 animate-pulse"></div>
           )}
         </div>
       </div>
@@ -282,3 +331,4 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 }
 
 export default SpiderCanvas;
+
