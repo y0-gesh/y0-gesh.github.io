@@ -73,7 +73,7 @@ function computeBodyAxisAlignmentAngle(model: THREE.Object3D): number {
 export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const spiderGroupRef = useRef<THREE.Group | null>(null);
-  const spinneretRef = useRef<THREE.Object3D | null>(null); // <-- NEW
+  const spinneretRef = useRef<THREE.Object3D | null>(null);
   const [modelLoaded, setModelLoaded] = useState(false);
   const spiderElementRef = useRef<HTMLDivElement>(null);
   const silkPathRefs = useRef<SVGPathElement[]>([]);
@@ -141,45 +141,14 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
         const scale = 1.85 / (maxDim || 1);
         model.scale.set(scale, scale, scale);
 
-        // Standard orientation: dorsal (top) facing camera
-        model.rotation.set(Math.PI / 2, 0, 0);
+        // Calibrated orientation: aligned straight vertically downwards
+        model.rotation.set(1.315, -0.560, -0.040);
         model.updateMatrixWorld(true);
 
-        // Find spinneret (Spider_back_00) and body center (SpiderHub_01) bones
+        // Find spinneret (Spider_back_00)
         const spiderBack = model.getObjectByName("Spider_back_00");
-        const spiderHub = model.getObjectByName("SpiderHub_01");
-
         if (spiderBack) {
-          spinneretRef.current = spiderBack; // <-- NEW: keep reference for projection
-        }
-
-        const MIN_LANDMARK_DISTANCE = 0.05;
-        let usedBoneAlignment = false;
-
-        if (spiderBack && spiderHub) {
-          const backPos = new THREE.Vector3();
-          const hubPos = new THREE.Vector3();
-          spiderBack.getWorldPosition(backPos);
-          spiderHub.getWorldPosition(hubPos);
-
-          // Calculate angle from back (abdomen) to hub (head) in screen XY plane
-          const dir = hubPos.clone().sub(backPos);
-
-          if (dir.length() > MIN_LANDMARK_DISTANCE) {
-            // Target vector is straight down (0, -1)
-            const currentAngle = Math.atan2(dir.x, -dir.y);
-            model.rotation.z -= currentAngle;
-            model.updateMatrixWorld(true);
-            usedBoneAlignment = true;
-          }
-        }
-
-        if (!usedBoneAlignment) {
-          // Landmarks were missing or too close together to give a
-          // reliable direction, so align the body from the model's own
-          // geometry instead of guessing a fixed angle
-          model.rotation.z += computeBodyAxisAlignmentAngle(model);
-          model.updateMatrixWorld(true);
+          spinneretRef.current = spiderBack;
         }
 
         // Recompute world bounding box after rotation
