@@ -12,10 +12,12 @@ interface SpiderCanvasProps {
 export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const spiderGroupRef = useRef<THREE.Group | null>(null);
+  const spinneretRef = useRef<THREE.Object3D | null>(null); // <-- NEW
   const [modelLoaded, setModelLoaded] = useState(false);
   const spiderElementRef = useRef<HTMLDivElement>(null);
   const silkPathRefs = useRef<SVGPathElement[]>([]);
-  const sideFiberRefs = useRef<SVGPathElement[]>([]);
+  const ambientSilkRef = useRef<SVGPathElement>(null);
+  const dropletRef = useRef<SVGCircleElement>(null);
 
   // Drag / Physics State (both X and Y deflection)
   const [x, setX] = useState(0);
@@ -31,7 +33,8 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 
   const DEFAULT_LENGTH = 75; // Base hanging web length in px
   const THRESHOLD = 45; // Pull distance to trigger toggle
-  const SILK_ATTACH_OFFSET = 58; // Extends silk strand directly into the center/abdomen of the spider model
+  // Used only for SVG height / viewBox (projection supplies the real attach point)
+  const SILK_ATTACH_OFFSET = 70;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -77,23 +80,56 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
         const scale = 1.85 / (maxDim || 1);
         model.scale.set(scale, scale, scale);
 
-        // Rotate so top faces camera and rotate around Z so spider body aligns vertically straight downwards
-        // model.rotation.x = Math.PI / 2;
-        model.rotation.x = Math.PI / 0.38;
-        model.rotation.z = 0.58; // Align body axis so head points straight vertically down
-        model.rotation.y = -0.6; // Align body axis so head points straight vertically down
+        // Standard orientation: dorsal (top) facing camera
+        model.rotation.set(Math.PI / 2, 0, 0);
         model.updateMatrixWorld(true);
 
-        // Calculate bounding box after scale and rotation
-        const rotatedBox = new THREE.Box3().setFromObject(model);
-        const rotatedCenter = rotatedBox.getCenter(new THREE.Vector3());
+        // Find spinneret (Spider_back_00) and body center (SpiderHub_01) bones
+        const spiderBack = model.getObjectByName("Spider_back_00");
+        const spiderHub = model.getObjectByName("SpiderHub_01");
 
-        // Center model inside group along X/Z and position top anchor near origin
-        model.position.set(
-          -rotatedCenter.x,
-          -rotatedBox.max.y + 0.1,
-          -rotatedCenter.z,
-        );
+        if (spiderBack) {
+          spinneretRef.current = spiderBack; // <-- NEW: keep reference for projection
+        }
+
+        if (spiderBack && spiderHub) {
+          const backPos = new THREE.Vector3();
+          const hubPos = new THREE.Vector3();
+          spiderBack.getWorldPosition(backPos);
+          spiderHub.getWorldPosition(hubPos);
+
+          // Calculate angle from back (abdomen) to hub (head) in screen XY plane
+          const dir = hubPos.clone().sub(backPos);
+          // Target vector is straight down (0, -1)
+          const currentAngle = Math.atan2(dir.x, -dir.y);
+          model.rotation.z -= currentAngle;
+          model.updateMatrixWorld(true);
+        } else {
+          // Precise manual vertical alignment angle
+          model.rotation.z = 0.58;
+          model.updateMatrixWorld(true);
+        }
+
+        // Recompute world bounding box after rotation
+        const rotatedBox = new THREE.Box3().setFromObject(model);
+
+        // Center on the actual abdomen apex (Spider_back_00) so silk enters the exact center of abdomen
+        if (spiderBack) {
+          const backPos = new THREE.Vector3();
+          spiderBack.getWorldPosition(backPos);
+          model.position.set(
+            -backPos.x,
+            -rotatedBox.max.y,
+            -backPos.z,
+          );
+        } else {
+          const rotatedCenter = rotatedBox.getCenter(new THREE.Vector3());
+          model.position.set(
+            -rotatedCenter.x,
+            -rotatedBox.max.y + 0.1,
+            -rotatedCenter.z,
+          );
+        }
 
         group.add(model);
         setModelLoaded(true);
@@ -112,9 +148,9 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 
       const elapsedTime = clock.getElapsedTime();
 
-      // Natural idle dangling sway movement
-      const swayX = Math.sin(elapsedTime * 1.5) * 2.8;
-      const swayRotation = Math.sin(elapsedTime * 1.5) * 0.07;
+      // Natural idle dangling sway movement (pendulum physics)
+      const swayX = Math.sin(elapsedTime * 1.5) * 3.4;
+      const swayRotation = Math.sin(elapsedTime * 1.5) * 0.08;
       const swayY = Math.cos(elapsedTime * 1.1) * 1.0;
 
       // When being dragged with cursor, tilt spider in direction of pull deflection
@@ -142,43 +178,50 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
       }
 
       /*
-       * Animate the silk string with deflection based on cursor pull direction!
-       * Top anchor stays at ceiling (x=60, y=1).
-       * Bottom follows the spider's dragged position (60 + currentX + swayX, length).
-       * The middle deflects and bows realistically according to cursor drag vector.
+       * Project the real spinneret location every frame so the silk
+       * stays perfectly glued to the abdomen even while the model tilts.
        */
       const dragX = currentXRef.current;
-      const length = DEFAULT_LENGTH + currentYRef.current + SILK_ATTACH_OFFSET;
+      const dragY = currentYRef.current;
 
+      let projX = 60;          // fallback (canvas center)
+      let projY = SILK_ATTACH_OFFSET; // fallback
+
+      if (spinneretRef.current) {
+        const vec = new THREE.Vector3();
+        spinneretRef.current.getWorldPosition(vec);
+        vec.project(camera);
+
+        // NDC → canvas pixels (y is flipped because NDC +Y is up)
+        projX = (vec.x * 0.5 + 0.5) * width;
+        projY = (-vec.y * 0.5 + 0.5) * height;
+      }
+
+      // Absolute position of the attachment point in the outer SVG coordinate system
+      const bottomX = dragX + swayX + projX;
+      const bottomY = DEFAULT_LENGTH + dragY + projY + swayY;
+
+      const dx = bottomX - 60;
+      const dy = bottomY - 1;
+
+      // Subtle dynamic harmonic flex along the string
       const wave1 = Math.sin(elapsedTime * 1.5);
       const wave2 = Math.sin(elapsedTime * 1.5 + 0.8);
       const wave3 = Math.sin(elapsedTime * 1.5 + 1.5);
 
-      const bottomX = 60 + dragX + swayX;
-      const bottomY = length;
-
-      // Realistic elastic curve control points reflecting pull deflection
-      const c1x = 60 + dragX * 0.18 + wave1 * 0.8;
-      const c2x = 60 + dragX * 0.48 + wave2 * 1.4;
-      const c3x = 60 + dragX * 0.78 + wave3 * 1.8;
+      // Realistic pendulum cubic Bézier control points
+      const c1x = 60 + dx * 0.30 + wave1 * 0.4;
+      const c1y = 1 + dy * 0.32;
+      const c2x = 60 + dx * 0.70 + wave2 * 0.6;
+      const c2y = 1 + dy * 0.68;
 
       /*
-       * Main silk fiber
+       * Main silk fiber - completely swinging with the spider
        */
       if (silkPathRefs.current[0]) {
         silkPathRefs.current[0].setAttribute(
           "d",
-          `
-        M 60 1
-        C
-          ${c1x} ${length * 0.22},
-          ${c2x} ${length * 0.48},
-          ${c3x} ${length * 0.72}
-        C
-          ${60 + dragX * 0.88 + wave1 * 1.5} ${length * 0.84},
-          ${60 + dragX * 0.95 + wave2 * 1.8} ${length * 0.94},
-          ${bottomX} ${bottomY}
-      `,
+          `M 60 1 C ${c1x} ${c1y}, ${c2x} ${c2y}, ${bottomX} ${bottomY}`,
         );
       }
 
@@ -188,17 +231,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
       if (silkPathRefs.current[1]) {
         silkPathRefs.current[1].setAttribute(
           "d",
-          `
-        M 60.12 1
-        C
-          ${60 + dragX * 0.2 + wave2 * 1.0} ${length * 0.25},
-          ${60 + dragX * 0.5 + wave3 * 1.2} ${length * 0.50},
-          ${60 + dragX * 0.8 + wave1 * 1.5} ${length * 0.75}
-        C
-          ${60 + dragX * 0.9 + wave2 * 1.6} ${length * 0.86},
-          ${60 + dragX * 0.96 + wave3 * 1.4} ${length * 0.95},
-          ${bottomX} ${bottomY}
-      `,
+          `M 60.12 1 C ${60 + dx * 0.32 + wave2 * 0.5} ${c1y}, ${60 + dx * 0.72 + wave3 * 0.6} ${c2y}, ${bottomX} ${bottomY}`,
         );
       }
 
@@ -208,18 +241,26 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
       if (silkPathRefs.current[2]) {
         silkPathRefs.current[2].setAttribute(
           "d",
-          `
-        M 59.94 1
-        C
-          ${60 + dragX * 0.22 + wave3 * 0.7} ${length * 0.28},
-          ${60 + dragX * 0.52 + wave1 * 1.1} ${length * 0.55},
-          ${60 + dragX * 0.82 + wave2 * 1.4} ${length * 0.78}
-        C
-          ${60 + dragX * 0.92 + wave1 * 1.5} ${length * 0.88},
-          ${bottomX} ${length * 0.96},
-          ${bottomX} ${bottomY}
-      `,
+          `M 59.94 1 C ${60 + dx * 0.28 + wave3 * 0.3} ${c1y}, ${60 + dx * 0.68 + wave1 * 0.5} ${c2y}, ${bottomX} ${bottomY}`,
         );
+      }
+
+      /*
+       * Ambient soft glow path - swings synchronously
+       */
+      if (ambientSilkRef.current) {
+        ambientSilkRef.current.setAttribute(
+          "d",
+          `M 60 1 C ${60 + dx * 0.3} ${c1y}, ${60 + dx * 0.7} ${c2y}, ${bottomX} ${bottomY}`,
+        );
+      }
+
+      /*
+       * Silk attachment droplet on spider spinneret
+       */
+      if (dropletRef.current) {
+        dropletRef.current.setAttribute("cx", bottomX.toFixed(2));
+        dropletRef.current.setAttribute("cy", bottomY.toFixed(2));
       }
 
       renderer.render(scene, camera);
@@ -411,6 +452,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 
         {/* Ambient atmospheric silk glow */}
         <path
+          ref={ambientSilkRef}
           d={`M 60 1 C 60 ${webEndY * 0.3}, 60 ${webEndY * 0.6}, 60 ${webEndY}`}
           fill="none"
           stroke="#ffffff"
@@ -428,12 +470,8 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
           d={`
             M 60 1
             C
-              60 ${webEndY * 0.22},
-              60 ${webEndY * 0.48},
-              60 ${webEndY * 0.72}
-            C
-              60 ${webEndY * 0.84},
-              60 ${webEndY * 0.94},
+              60 ${webEndY * 0.30},
+              60 ${webEndY * 0.70},
               ${60 + x} ${webEndY}
           `}
           fill="none"
@@ -452,12 +490,8 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
           d={`
             M 60.12 1
             C
-              60.12 ${webEndY * 0.25},
-              60.05 ${webEndY * 0.50},
-              60.1 ${webEndY * 0.75}
-            C
-              60.15 ${webEndY * 0.86},
-              60.08 ${webEndY * 0.95},
+              60.12 ${webEndY * 0.32},
+              60.1 ${webEndY * 0.72},
               ${60 + x} ${webEndY}
           `}
           fill="none"
@@ -477,11 +511,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
             M 59.94 1
             C
               59.94 ${webEndY * 0.28},
-              60.05 ${webEndY * 0.55},
-              59.98 ${webEndY * 0.78}
-            C
-              59.94 ${webEndY * 0.88},
-              60 ${webEndY * 0.96},
+              59.98 ${webEndY * 0.68},
               ${60 + x} ${webEndY}
           `}
           fill="none"
@@ -493,6 +523,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 
         {/* Spinneret connection droplet on spider */}
         <circle
+          ref={dropletRef}
           cx={60 + x}
           cy={webEndY}
           r="0.75"
@@ -574,4 +605,3 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 }
 
 export default SpiderCanvas;
-
