@@ -9,6 +9,67 @@ interface SpiderCanvasProps {
   onPullToggle: () => void;
 }
 
+/*
+ * Computes the rotation (around the screen z-axis) needed to bring the
+ * model's dominant axis onto the vertical. This is used as a fallback
+ * when the named landmark bones aren't present on the model, so we no
+ * longer depend on a hardcoded angle that only matches one specific rig.
+ *
+ * The dominant axis is found via principal component analysis over all
+ * mesh vertices in world space, which naturally follows the spider's
+ * elongated body/leg shape regardless of bone naming.
+ */
+function computeBodyAxisAlignmentAngle(model: THREE.Object3D): number {
+  const worldPos = new THREE.Vector3();
+  const points: { x: number; y: number }[] = [];
+  let meanX = 0;
+  let meanY = 0;
+
+  model.traverse((child) => {
+    const mesh = child as THREE.Mesh;
+    if (!mesh.isMesh) return;
+
+    const positionAttr = mesh.geometry?.getAttribute("position");
+    if (!positionAttr) return;
+
+    for (let i = 0; i < positionAttr.count; i++) {
+      worldPos.fromBufferAttribute(positionAttr, i);
+      mesh.localToWorld(worldPos);
+      points.push({ x: worldPos.x, y: worldPos.y });
+      meanX += worldPos.x;
+      meanY += worldPos.y;
+    }
+  });
+
+  if (points.length === 0) return 0;
+
+  meanX /= points.length;
+  meanY /= points.length;
+
+  let covXX = 0;
+  let covYY = 0;
+  let covXY = 0;
+
+  for (const p of points) {
+    const dx = p.x - meanX;
+    const dy = p.y - meanY;
+    covXX += dx * dx;
+    covYY += dy * dy;
+    covXY += dx * dy;
+  }
+
+  // Angle of the dominant axis (an undirected line) measured from the x-axis
+  const axisAngle = 0.5 * Math.atan2(2 * covXY, covXX - covYY);
+
+  // Rotation needed to bring that axis onto the vertical (y-axis), wrapped
+  // to the smallest turn so the model doesn't get flipped unexpectedly
+  let delta = Math.PI / 2 - axisAngle;
+  while (delta > Math.PI / 2) delta -= Math.PI;
+  while (delta < -Math.PI / 2) delta += Math.PI;
+
+  return delta;
+}
+
 export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const spiderGroupRef = useRef<THREE.Group | null>(null);
@@ -92,6 +153,9 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
           spinneretRef.current = spiderBack; // <-- NEW: keep reference for projection
         }
 
+        const MIN_LANDMARK_DISTANCE = 0.05;
+        let usedBoneAlignment = false;
+
         if (spiderBack && spiderHub) {
           const backPos = new THREE.Vector3();
           const hubPos = new THREE.Vector3();
@@ -100,13 +164,21 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 
           // Calculate angle from back (abdomen) to hub (head) in screen XY plane
           const dir = hubPos.clone().sub(backPos);
-          // Target vector is straight down (0, -1)
-          const currentAngle = Math.atan2(dir.x, -dir.y);
-          model.rotation.z -= currentAngle;
-          model.updateMatrixWorld(true);
-        } else {
-          // Precise manual vertical alignment angle
-          model.rotation.z = 0.58;
+
+          if (dir.length() > MIN_LANDMARK_DISTANCE) {
+            // Target vector is straight down (0, -1)
+            const currentAngle = Math.atan2(dir.x, -dir.y);
+            model.rotation.z -= currentAngle;
+            model.updateMatrixWorld(true);
+            usedBoneAlignment = true;
+          }
+        }
+
+        if (!usedBoneAlignment) {
+          // Landmarks were missing or too close together to give a
+          // reliable direction, so align the body from the model's own
+          // geometry instead of guessing a fixed angle
+          model.rotation.z += computeBodyAxisAlignmentAngle(model);
           model.updateMatrixWorld(true);
         }
 
