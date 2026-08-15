@@ -15,19 +15,23 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
   const [modelLoaded, setModelLoaded] = useState(false);
   const spiderElementRef = useRef<HTMLDivElement>(null);
   const silkPathRefs = useRef<SVGPathElement[]>([]);
+  const sideFiberRefs = useRef<SVGPathElement[]>([]);
 
-  // Drag / Physics State
+  // Drag / Physics State (both X and Y deflection)
+  const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
+  const startXRef = useRef(0);
   const startYRef = useRef(0);
+  const currentXRef = useRef(0);
   const currentYRef = useRef(0);
   const didTriggerRef = useRef(false);
   const animFrameRef = useRef<number | null>(null);
 
   const DEFAULT_LENGTH = 75; // Base hanging web length in px
   const THRESHOLD = 45; // Pull distance to trigger toggle
-  const SILK_ATTACH_OFFSET = 50; // Exact pixel Y in canvas where silk connects to spider spinneret
+  const SILK_ATTACH_OFFSET = 58; // Extends silk strand directly into the center/abdomen of the spider model
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -36,7 +40,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
     const height = 140;
 
     const scene = new THREE.Scene();
-    // Camera positioned slightly below origin looking towards the spider hanging from y=0
+    // Camera positioned looking directly at the hanging spider
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
     camera.position.set(0, -0.95, 3.6);
 
@@ -73,19 +77,21 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
         const scale = 1.85 / (maxDim || 1);
         model.scale.set(scale, scale, scale);
 
-        // Rotate so head points downwards hanging from web line
-        model.rotation.x = Math.PI / 2;
+        // Rotate so top faces camera and rotate around Z so spider body aligns vertically straight downwards
+        // model.rotation.x = Math.PI / 2;
+        model.rotation.x = Math.PI / 0.38;
+        model.rotation.z = 0.58; // Align body axis so head points straight vertically down
+        model.rotation.y = -0.6; // Align body axis so head points straight vertically down
         model.updateMatrixWorld(true);
 
         // Calculate bounding box after scale and rotation
         const rotatedBox = new THREE.Box3().setFromObject(model);
         const rotatedCenter = rotatedBox.getCenter(new THREE.Vector3());
 
-        // Offset model inside group so its spinneret/top abdomen is precisely at (0, 0, 0)
-        // and centered along X and Z axes
+        // Center model inside group along X/Z and position top anchor near origin
         model.position.set(
           -rotatedCenter.x,
-          -rotatedBox.max.y + 0.1, // Top anchor point at local origin
+          -rotatedBox.max.y + 0.1,
           -rotatedCenter.z,
         );
 
@@ -106,19 +112,22 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 
       const elapsedTime = clock.getElapsedTime();
 
-      // Same natural movement used by the spider.
-      const swayX = Math.sin(elapsedTime * 1.5) * 3.2;
-      const swayRotation = Math.sin(elapsedTime * 1.5) * 0.08;
-      const swayY = Math.cos(elapsedTime * 1.1) * 1.2;
+      // Natural idle dangling sway movement
+      const swayX = Math.sin(elapsedTime * 1.5) * 2.8;
+      const swayRotation = Math.sin(elapsedTime * 1.5) * 0.07;
+      const swayY = Math.cos(elapsedTime * 1.1) * 1.0;
+
+      // When being dragged with cursor, tilt spider in direction of pull deflection
+      const dragTilt = (currentXRef.current / 60) * 0.25;
 
       if (spiderGroupRef.current) {
-        spiderGroupRef.current.rotation.z = swayRotation;
-        spiderGroupRef.current.rotation.y = Math.cos(elapsedTime * 1.1) * 0.12;
+        spiderGroupRef.current.rotation.z = swayRotation + dragTilt;
+        spiderGroupRef.current.rotation.y = Math.cos(elapsedTime * 1.1) * 0.1;
       }
 
       /*
-       * Send the horizontal movement to the React spider wrapper
-       * without causing a React render every animation frame.
+       * Send the sway movement to the React spider wrapper
+       * without causing a React re-render every animation frame.
        */
       if (spiderElementRef.current) {
         spiderElementRef.current.style.setProperty(
@@ -133,28 +142,28 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
       }
 
       /*
-       * Animate the silk itself.
-       *
-       * Top remains attached to the ceiling at x=60.
-       * Bottom follows the spider.
-       *
-       * The middle bends naturally, instead of moving as a rigid line.
+       * Animate the silk string with deflection based on cursor pull direction!
+       * Top anchor stays at ceiling (x=60, y=1).
+       * Bottom follows the spider's dragged position (60 + currentX + swayX, length).
+       * The middle deflects and bows realistically according to cursor drag vector.
        */
+      const dragX = currentXRef.current;
       const length = DEFAULT_LENGTH + currentYRef.current + SILK_ATTACH_OFFSET;
 
       const wave1 = Math.sin(elapsedTime * 1.5);
       const wave2 = Math.sin(elapsedTime * 1.5 + 0.8);
       const wave3 = Math.sin(elapsedTime * 1.5 + 1.5);
 
-      const bottomX = 60 + swayX;
+      const bottomX = 60 + dragX + swayX;
       const bottomY = length;
 
-      const c1x = 60 + wave1 * 0.9;
-      const c2x = 60 + wave2 * 1.8;
-      const c3x = 60 + wave3 * 2.5;
+      // Realistic elastic curve control points reflecting pull deflection
+      const c1x = 60 + dragX * 0.18 + wave1 * 0.8;
+      const c2x = 60 + dragX * 0.48 + wave2 * 1.4;
+      const c3x = 60 + dragX * 0.78 + wave3 * 1.8;
 
       /*
-       * Main silk.
+       * Main silk fiber
        */
       if (silkPathRefs.current[0]) {
         silkPathRefs.current[0].setAttribute(
@@ -162,51 +171,51 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
           `
         M 60 1
         C
-          ${c1x} ${length * 0.18},
-          ${c2x} ${length * 0.38},
-          ${c3x} ${length * 0.58}
+          ${c1x} ${length * 0.22},
+          ${c2x} ${length * 0.48},
+          ${c3x} ${length * 0.72}
         C
-          ${60 + wave1 * 2.2} ${length * 0.74},
-          ${60 + wave2 * 2.8} ${length * 0.89},
+          ${60 + dragX * 0.88 + wave1 * 1.5} ${length * 0.84},
+          ${60 + dragX * 0.95 + wave2 * 1.8} ${length * 0.94},
           ${bottomX} ${bottomY}
       `,
         );
       }
 
       /*
-       * Secondary silk filament.
+       * Secondary silk filament
        */
       if (silkPathRefs.current[1]) {
         silkPathRefs.current[1].setAttribute(
           "d",
           `
-        M 60.15 1
+        M 60.12 1
         C
-          ${60 + wave2 * 1.2} ${length * 0.2},
-          ${60 + wave3 * 1.5} ${length * 0.42},
-          ${60 + wave1 * 2.0} ${length * 0.62}
+          ${60 + dragX * 0.2 + wave2 * 1.0} ${length * 0.25},
+          ${60 + dragX * 0.5 + wave3 * 1.2} ${length * 0.50},
+          ${60 + dragX * 0.8 + wave1 * 1.5} ${length * 0.75}
         C
-          ${60 + wave2 * 2.5} ${length * 0.78},
-          ${60 + wave3 * 2.3} ${length * 0.92},
+          ${60 + dragX * 0.9 + wave2 * 1.6} ${length * 0.86},
+          ${60 + dragX * 0.96 + wave3 * 1.4} ${length * 0.95},
           ${bottomX} ${bottomY}
       `,
         );
       }
 
       /*
-       * Fine highlight filament.
+       * Fine highlight filament
        */
       if (silkPathRefs.current[2]) {
         silkPathRefs.current[2].setAttribute(
           "d",
           `
-        M 59.95 1
+        M 59.94 1
         C
-          ${60 + wave3 * 0.8} ${length * 0.25},
-          ${60 + wave1 * 1.4} ${length * 0.5},
-          ${60 + wave2 * 1.8} ${length * 0.75}
+          ${60 + dragX * 0.22 + wave3 * 0.7} ${length * 0.28},
+          ${60 + dragX * 0.52 + wave1 * 1.1} ${length * 0.55},
+          ${60 + dragX * 0.82 + wave2 * 1.4} ${length * 0.78}
         C
-          ${60 + wave1 * 2.0} ${length * 0.88},
+          ${60 + dragX * 0.92 + wave1 * 1.5} ${length * 0.88},
           ${bottomX} ${length * 0.96},
           ${bottomX} ${bottomY}
       `,
@@ -215,8 +224,6 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 
       renderer.render(scene, camera);
     };
-
-    animate();
 
     animate();
 
@@ -231,26 +238,44 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 
   const isAnimatingRef = useRef(false);
 
-  // Spring release bounce helper
-  const animateSpringRelease = (startVal: number) => {
-    let current = startVal;
-    let velocity = 0;
+  // Dual-axis spring release bounce helper
+  const animateSpringRelease = (startX: number, startY: number) => {
+    let curX = startX;
+    let curY = startY;
+    let velX = 0;
+    let velY = 0;
     const target = 0;
     const stiffness = 0.16;
-    const damping = 0.7;
+    const damping = 0.72;
 
     isAnimatingRef.current = true;
 
     const step = () => {
-      const force = (target - current) * stiffness;
-      velocity = (velocity + force) * damping;
-      current += velocity;
+      const forceX = (target - curX) * stiffness;
+      velX = (velX + forceX) * damping;
+      curX += velX;
 
-      setY(current);
+      const forceY = (target - curY) * stiffness;
+      velY = (velY + forceY) * damping;
+      curY += velY;
 
-      if (Math.abs(current - target) > 0.4 || Math.abs(velocity) > 0.4) {
+      currentXRef.current = curX;
+      currentYRef.current = curY;
+      setX(curX);
+      setY(curY);
+
+      const stillMoving =
+        Math.abs(curX - target) > 0.3 ||
+        Math.abs(velX) > 0.3 ||
+        Math.abs(curY - target) > 0.3 ||
+        Math.abs(velY) > 0.3;
+
+      if (stillMoving) {
         animFrameRef.current = requestAnimationFrame(step);
       } else {
+        currentXRef.current = 0;
+        currentYRef.current = 0;
+        setX(0);
         setY(0);
         isAnimatingRef.current = false;
         animFrameRef.current = null;
@@ -267,6 +292,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
     e.stopPropagation();
     setIsDragging(true);
     didTriggerRef.current = false;
+    startXRef.current = e.clientX - x;
     startYRef.current = e.clientY - y;
 
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -274,13 +300,21 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
+    const deltaX = e.clientX - startXRef.current;
     const deltaY = e.clientY - startYRef.current;
-    const constrainedY = Math.max(0, Math.min(100, deltaY));
 
+    // Allow lateral deflection (±55px) and downward pull (0-110px)
+    const constrainedX = Math.max(-55, Math.min(55, deltaX));
+    const constrainedY = Math.max(0, Math.min(110, deltaY));
+
+    currentXRef.current = constrainedX;
     currentYRef.current = constrainedY;
+    setX(constrainedX);
     setY(constrainedY);
 
-    if (constrainedY >= THRESHOLD && !didTriggerRef.current) {
+    // Trigger toggle when pulled sufficiently downward or overall drag distance
+    const totalPull = Math.sqrt(constrainedX * constrainedX + constrainedY * constrainedY);
+    if ((constrainedY >= THRESHOLD || totalPull >= THRESHOLD + 5) && !didTriggerRef.current) {
       didTriggerRef.current = true;
       onPullToggle();
     }
@@ -293,16 +327,18 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
       (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
     } catch {}
 
+    const releaseX = currentXRef.current;
     const releaseY = currentYRef.current;
 
-    // If click without drag (drag distance < 6px), run animated pull down
-    if (releaseY < 6 && !didTriggerRef.current && !isAnimatingRef.current) {
+    // If click without significant drag (< 6px), run animated pull down
+    if (Math.hypot(releaseX, releaseY) < 6 && !didTriggerRef.current && !isAnimatingRef.current) {
       isAnimatingRef.current = true;
       let pull = 0;
       const maxPull = 55;
 
       const pullStep = () => {
         pull += 7;
+        currentYRef.current = pull;
         setY(pull);
 
         if (pull >= THRESHOLD && !didTriggerRef.current) {
@@ -313,7 +349,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
         if (pull < maxPull) {
           requestAnimationFrame(pullStep);
         } else {
-          animateSpringRelease(maxPull);
+          animateSpringRelease(0, maxPull);
         }
       };
 
@@ -321,8 +357,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
       return;
     }
 
-    currentYRef.current = 0;
-    animateSpringRelease(releaseY);
+    animateSpringRelease(releaseX, releaseY);
   };
 
   const currentWebLength = DEFAULT_LENGTH + y;
@@ -333,12 +368,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
       className="fixed top-0 right-6 sm:right-16 z-999999 flex flex-col items-center pointer-events-none select-none"
       style={{ width: "120px", height: `${currentWebLength + 160}px` }}
     >
-      {/* Real Spider Web Silk Strand SVG */}
-      {/* Reference-style spider silk strand */}
-      {/* =========================================================
-          REALISTIC ANIMATED SPIDER SILK
-          ========================================================= */}
-
+      {/* Real Animated Spider Web Silk Strand SVG */}
       <svg
         width="120"
         height={webEndY + 25}
@@ -370,10 +400,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
           </filter>
         </defs>
 
-        {/* =====================================================
-            CEILING ATTACHMENT
-            ===================================================== */}
-
+        {/* Ceiling attachment */}
         <circle
           cx="60"
           cy="1"
@@ -382,12 +409,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
           opacity={isEnabled ? 0.8 : 0.3}
         />
 
-        {/* =====================================================
-            VERY SUBTLE AMBIENT SILK
-            Almost invisible — just gives the thread a little
-            natural presence against a dark background.
-            ===================================================== */}
-
+        {/* Ambient atmospheric silk glow */}
         <path
           d={`M 60 1 C 60 ${webEndY * 0.3}, 60 ${webEndY * 0.6}, 60 ${webEndY}`}
           fill="none"
@@ -398,207 +420,88 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
           filter="url(#silk-ambient)"
         />
 
-        {/* =====================================================
-            MAIN SILK FIBER
-            This is the primary visible strand.
-            Thin, irregular and animated.
-            ===================================================== */}
-
+        {/* Main silk fiber */}
         <path
           ref={(el) => {
-            if (el) {
-              silkPathRefs.current[0] = el;
-            }
+            if (el) silkPathRefs.current[0] = el;
           }}
           d={`
             M 60 1
-
             C
-              60 ${webEndY * 0.18},
-              60 ${webEndY * 0.38},
-              60 ${webEndY * 0.58}
-
+              60 ${webEndY * 0.22},
+              60 ${webEndY * 0.48},
+              60 ${webEndY * 0.72}
             C
-              60 ${webEndY * 0.75},
-              60 ${webEndY * 0.9},
-              60 ${webEndY}
+              60 ${webEndY * 0.84},
+              60 ${webEndY * 0.94},
+              ${60 + x} ${webEndY}
           `}
           fill="none"
           stroke="#ffffff"
-          strokeWidth="0.48"
+          strokeWidth="0.55"
           strokeLinecap="round"
           strokeLinejoin="round"
-          opacity={isEnabled ? 0.9 : 0.38}
+          opacity={isEnabled ? 0.92 : 0.38}
         />
 
-        {/* =====================================================
-            SECOND SILK FIBER
-            Slightly offset from the main fiber. This creates
-            the appearance of several microscopic strands.
-            ===================================================== */}
-
+        {/* Secondary micro-strand */}
         <path
           ref={(el) => {
-            if (el) {
-              silkPathRefs.current[1] = el;
-            }
+            if (el) silkPathRefs.current[1] = el;
           }}
           d={`
             M 60.12 1
-
             C
-              60.12 ${webEndY * 0.2},
-              60 ${webEndY * 0.42},
-              60.1 ${webEndY * 0.62}
-
+              60.12 ${webEndY * 0.25},
+              60.05 ${webEndY * 0.50},
+              60.1 ${webEndY * 0.75}
             C
-              60.15 ${webEndY * 0.78},
-              60 ${webEndY * 0.92},
-              60 ${webEndY}
+              60.15 ${webEndY * 0.86},
+              60.08 ${webEndY * 0.95},
+              ${60 + x} ${webEndY}
           `}
           fill="none"
           stroke="#ffffff"
-          strokeWidth="0.28"
+          strokeWidth="0.32"
           strokeLinecap="round"
           strokeLinejoin="round"
-          opacity={isEnabled ? 0.65 : 0.24}
+          opacity={isEnabled ? 0.68 : 0.24}
         />
 
-        {/* =====================================================
-            MICRO HIGHLIGHT FIBER
-            Extremely thin. Gives real silk its tiny highlight.
-            ===================================================== */}
-
+        {/* Micro highlight fiber */}
         <path
           ref={(el) => {
-            if (el) {
-              silkPathRefs.current[2] = el;
-            }
+            if (el) silkPathRefs.current[2] = el;
           }}
           d={`
             M 59.94 1
-
             C
-              59.94 ${webEndY * 0.25},
-              60.05 ${webEndY * 0.48},
-              59.98 ${webEndY * 0.7}
-
+              59.94 ${webEndY * 0.28},
+              60.05 ${webEndY * 0.55},
+              59.98 ${webEndY * 0.78}
             C
-              59.94 ${webEndY * 0.84},
-              60 ${webEndY * 0.94},
-              60 ${webEndY}
+              59.94 ${webEndY * 0.88},
+              60 ${webEndY * 0.96},
+              ${60 + x} ${webEndY}
           `}
           fill="none"
           stroke="#ffffff"
-          strokeWidth="0.16"
+          strokeWidth="0.18"
           strokeLinecap="round"
-          opacity={isEnabled ? 0.72 : 0.2}
+          opacity={isEnabled ? 0.75 : 0.2}
         />
 
-        {/* =====================================================
-            TINY BROKEN SIDE FIBERS
-            These make it feel less computer-perfect.
-            ===================================================== */}
-
-        {isEnabled && (
-          <>
-            <path
-              d={`
-                M 59.7 ${webEndY * 0.18}
-                C
-                  59.82 ${webEndY * 0.2},
-                  59.92 ${webEndY * 0.22},
-                  60 ${webEndY * 0.25}
-              `}
-              fill="none"
-              stroke="#ffffff"
-              strokeWidth="0.12"
-              strokeLinecap="round"
-              opacity="0.35"
-            />
-
-            <path
-              d={`
-                M 60.22 ${webEndY * 0.36}
-                C
-                  60.12 ${webEndY * 0.38},
-                  60.04 ${webEndY * 0.4},
-                  59.98 ${webEndY * 0.43}
-              `}
-              fill="none"
-              stroke="#ffffff"
-              strokeWidth="0.11"
-              strokeLinecap="round"
-              opacity="0.3"
-            />
-
-            <path
-              d={`
-                M 59.75 ${webEndY * 0.57}
-                C
-                  59.84 ${webEndY * 0.59},
-                  59.94 ${webEndY * 0.61},
-                  60.02 ${webEndY * 0.63}
-              `}
-              fill="none"
-              stroke="#ffffff"
-              strokeWidth="0.1"
-              strokeLinecap="round"
-              opacity="0.28"
-            />
-
-            <path
-              d={`
-                M 60.24 ${webEndY * 0.73}
-                C
-                  60.14 ${webEndY * 0.75},
-                  60.06 ${webEndY * 0.77},
-                  60 ${webEndY * 0.8}
-              `}
-              fill="none"
-              stroke="#ffffff"
-              strokeWidth="0.1"
-              strokeLinecap="round"
-              opacity="0.25"
-            />
-          </>
-        )}
-
-        {/* =====================================================
-            SPINNERET CONNECTION
-            The silk narrows slightly right before the spider.
-            ===================================================== */}
-
-        <path
-          d={`
-            M 60 ${webEndY - 4}
-
-            C
-              59.98 ${webEndY - 3},
-              59.99 ${webEndY - 1.5},
-              60 ${webEndY}
-          `}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="0.52"
-          strokeLinecap="round"
-          opacity={isEnabled ? 0.92 : 0.35}
-        />
-
-        {/* Tiny silk attachment point */}
+        {/* Spinneret connection droplet on spider */}
         <circle
-          cx="60"
+          cx={60 + x}
           cy={webEndY}
-          r="0.65"
+          r="0.75"
           fill="#ffffff"
-          opacity={isEnabled ? 0.85 : 0.3}
+          opacity={isEnabled ? 0.9 : 0.35}
         />
       </svg>
 
-      {/* =========================================================
-          INTERACTIVE SPIDER
-          ========================================================= */}
-
+      {/* Interactive 3D Spider */}
       <div
         ref={spiderElementRef}
         className="
@@ -616,11 +519,8 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
         style={{
           transform: `
             translate3d(
-              var(--spider-sway-x, 0px),
-              calc(
-                ${currentWebLength}px +
-                var(--spider-sway-y, 0px)
-              ),
+              calc(${x}px + var(--spider-sway-x, 0px)),
+              calc(${currentWebLength}px + var(--spider-sway-y, 0px)),
               0
             )
           `,
@@ -646,10 +546,7 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
           "
         />
 
-        {/* =====================================================
-            3D SPIDER CANVAS
-            ===================================================== */}
-
+        {/* 3D Spider Canvas */}
         <div
           ref={containerRef}
           className="
@@ -677,3 +574,4 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
 }
 
 export default SpiderCanvas;
+
