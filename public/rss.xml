@@ -8,6 +8,22 @@
     <atom:link href="https://yogeshtandan.in/rss.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title><![CDATA[Publishing a React Native Application to the Google Play Store]]></title>
+      <link>https://yogeshtandan.in/blog/react-native-google-play-store-publishing-guide</link>
+      <guid isPermaLink="true">https://yogeshtandan.in/blog/react-native-google-play-store-publishing-guide</guid>
+      <pubDate>Wed, 12 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A practical guide to preparing, signing, testing, and publishing a React Native application on the Google Play Store.]]></description>
+      <category>Development</category>
+    </item>
+    <item>
+      <title><![CDATA[Adding a Git Submodule to a Repository and Using It in CI/CD]]></title>
+      <link>https://yogeshtandan.in/blog/git-submodule-ci-cd-guide</link>
+      <guid isPermaLink="true">https://yogeshtandan.in/blog/git-submodule-ci-cd-guide</guid>
+      <pubDate>Tue, 11 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A practical guide to adding a private Git repository as a submodule, configuring GitHub Actions authentication, and including the submodule in automated builds and deployments.]]></description>
+      <category>Development</category>
+    </item>
+    <item>
       <title><![CDATA[Connecting a Custom Domain to GitHub Pages: A Practical DNS Guide]]></title>
       <link>https://yogeshtandan.in/blog/github-pages-custom-domain-guide</link>
       <guid isPermaLink="true">https://yogeshtandan.in/blog/github-pages-custom-domain-guide</guid>

@@ -2,8 +2,6 @@ import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { ComicPanel } from "@/components/ui/ComicPanel";
 import { ComicButton } from "@/components/ui/ComicButton";
 import { NarratorBox } from "@/components/ui/NarratorBox";
@@ -130,7 +128,6 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         aria-hidden="true"
       ></div>
 
-      <Header />
       <CodeBlockCopy />
       <main className="grow py-12 bg-halftone">
         <div className="max-w-6xl mx-auto px-4 md:px-8">
@@ -156,7 +153,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                   alt={post.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                   <h1 className="font-comic-header text-3xl sm:text-5xl uppercase text-white tracking-wide leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                     {post.title}
                   </h1>
@@ -309,8 +306,6 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           </div>
         </div>
       </main>
-
-      <Footer />
 
       {/* Fallback Scroll listener JS for browsers that don't support native CSS timeline */}
       <script

@@ -1,33 +1,21 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { ComicPanel } from "@/components/ui/ComicPanel";
 import { ComicButton } from "@/components/ui/ComicButton";
-import { NarratorBox } from "@/components/ui/NarratorBox";
 import { SoundEffectBadge } from "@/components/ui/SoundEffectBadge";
 import { SpiderWebOverlay } from "@/components/ui/SpiderWebOverlay";
-import {
-  Home,
-  ArrowLeft,
-  Compass,
-  FolderGit2,
-  Newspaper,
-  ShieldAlert,
-} from "lucide-react";
+import { Home, ArrowLeft, ShieldAlert } from "lucide-react";
 
 export default function NotFound() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen flex flex-col bg-background relative overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-background relative overflow-hidden select-none">
       <SpiderWebOverlay />
-      <Header />
 
-      <main className="flex-grow py-12 md:py-20 bg-halftone flex items-center justify-center">
+      <main className="grow flex items-center justify-center p-4 md:p-8 bg-halftone relative z-10">
         <div className="max-w-4xl mx-auto px-4 md:px-8 w-full">
           {/* Main 404 Hero Panel */}
           <ComicPanel
@@ -146,8 +134,6 @@ export default function NotFound() {
           </ComicPanel>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
