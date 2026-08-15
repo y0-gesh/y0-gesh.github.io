@@ -194,12 +194,18 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
       const swayRotation = Math.sin(elapsedTime * 1.5) * 0.08;
       const swayY = Math.cos(elapsedTime * 1.1) * 1.0;
 
-      // When being dragged with cursor, tilt spider in direction of pull deflection
-      const dragTilt = (currentXRef.current / 60) * 0.25;
+      const dragX = currentXRef.current;
+      const dragY = currentYRef.current;
+
+      // Calculate the true direction vector of the string from the ceiling anchor
+      const totalDx = dragX + swayX;
+      const totalDy = DEFAULT_LENGTH + dragY + SILK_ATTACH_OFFSET + swayY;
+      const tensionAngle = Math.atan2(totalDx, totalDy);
 
       if (spiderGroupRef.current) {
-        spiderGroupRef.current.rotation.z = swayRotation + dragTilt;
-        spiderGroupRef.current.rotation.y = Math.cos(elapsedTime * 1.1) * 0.1;
+        // Body tilts dynamically to align along the line of tension of the web strand!
+        spiderGroupRef.current.rotation.z = -tensionAngle + swayRotation * 0.4;
+        spiderGroupRef.current.rotation.y = Math.cos(elapsedTime * 1.1) * 0.08;
       }
 
       /*
@@ -222,9 +228,6 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
        * Project the real spinneret location every frame so the silk
        * stays perfectly glued to the abdomen even while the model tilts.
        */
-      const dragX = currentXRef.current;
-      const dragY = currentYRef.current;
-
       let projX = 60;          // fallback (canvas center)
       let projY = SILK_ATTACH_OFFSET; // fallback
 
@@ -380,23 +383,46 @@ export function SpiderCanvas({ isEnabled, onPullToggle }: SpiderCanvasProps) {
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
+  const MAX_PULL_RADIUS = 135; // Maximum stretch radius before automatic snap detachment
+
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
     const deltaX = e.clientX - startXRef.current;
     const deltaY = e.clientY - startYRef.current;
+    const rawY = Math.max(0, deltaY);
+    const pullDistance = Math.hypot(deltaX, rawY);
 
-    // Allow lateral deflection (±55px) and downward pull (0-110px)
-    const constrainedX = Math.max(-55, Math.min(55, deltaX));
-    const constrainedY = Math.max(0, Math.min(110, deltaY));
+    // Auto-detach grab when pulled past max stretch radius!
+    if (pullDistance >= MAX_PULL_RADIUS) {
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {}
+      setIsDragging(false);
 
-    currentXRef.current = constrainedX;
-    currentYRef.current = constrainedY;
-    setX(constrainedX);
-    setY(constrainedY);
+      if (!didTriggerRef.current) {
+        didTriggerRef.current = true;
+        onPullToggle();
+      }
+
+      const clampedX = (deltaX / pullDistance) * MAX_PULL_RADIUS;
+      const clampedY = (rawY / pullDistance) * MAX_PULL_RADIUS;
+
+      currentXRef.current = clampedX;
+      currentYRef.current = clampedY;
+      setX(clampedX);
+      setY(clampedY);
+
+      animateSpringRelease(clampedX, clampedY);
+      return;
+    }
+
+    currentXRef.current = deltaX;
+    currentYRef.current = rawY;
+    setX(deltaX);
+    setY(rawY);
 
     // Trigger toggle when pulled sufficiently downward or overall drag distance
-    const totalPull = Math.sqrt(constrainedX * constrainedX + constrainedY * constrainedY);
-    if ((constrainedY >= THRESHOLD || totalPull >= THRESHOLD + 5) && !didTriggerRef.current) {
+    if ((rawY >= THRESHOLD || pullDistance >= THRESHOLD) && !didTriggerRef.current) {
       didTriggerRef.current = true;
       onPullToggle();
     }
