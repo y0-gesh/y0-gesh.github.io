@@ -113,7 +113,10 @@ export function ProjectsList({ initialProjects }: ProjectsListProps) {
                   {project.slug === 'cicd-infrastructure-automation' && (
                     <img src="/images/devops-journey.png" alt={project.title} className="absolute inset-0 w-full h-full object-cover" />
                   )}
-                  {!['think-canvas', 'node-editor-flow', 'cicd-infrastructure-automation'].includes(project.slug) && (
+                  {project.slug === 'chrono-nutrition' && (
+                    <img src="/images/chrono-nutrition.png" alt={project.title} className="absolute inset-0 w-full h-full object-cover" />
+                  )}
+                  {!['think-canvas', 'node-editor-flow', 'cicd-infrastructure-automation', 'chrono-nutrition'].includes(project.slug) && (
                     <span className="font-comic-title text-xl text-muted-foreground z-10">
                       {project.title}
                     </span>
