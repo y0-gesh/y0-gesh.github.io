@@ -11,12 +11,12 @@ A comic-book-inspired engineering portfolio and technical newsroom built for **Y
 
 ## ✨ Features & Highlights
 
-- 🎨 **Comic Design System**: Built-in halftone dot overlays, thick panel borders, speech bubble tooltips, sound effect badges (`KAPOW!`, `BAM!`), and retro typography (`Bangers`, `Bebas Neue`, `Inter`).
-- 🌐 **Custom Domain & SEO Ready**: Hosted at [https://yogeshtandan.in/](https://yogeshtandan.in/) with dynamic OpenGraph metadata, JSON-LD structured data (Person, BlogPosting, CollectionPage), automatically generated `sitemap.xml`, `robots.txt`, and `rss.xml`.
-- ⚡ **WebGL Interactive Hero**: Embedded interactive 3D hero canvas built with **Three.js** featuring real-time light interactions and particle grids.
-- 📜 **Markdown Chronicles & Dossiers**: Built-in markdown parser using `Marked` and `gray-matter` for technical articles, TOC navigation, and project case studies.
-- 📑 **Interactive Pagination & Filtering**: Category and tag filters with client-side pagination across project and blog listings.
-- 🌓 **Dark / Light Mode**: Seamless theme switching using `next-themes`.
+- **Comic Design System**: Built-in halftone dot overlays, thick panel borders, speech bubble tooltips, sound effect badges (`KAPOW!`, `BAM!`), and retro typography (`Bangers`, `Bebas Neue`, `Inter`).
+- **Custom Domain & SEO Ready**: Hosted at [https://yogeshtandan.in/](https://yogeshtandan.in/) with dynamic OpenGraph metadata, JSON-LD structured data (Person, BlogPosting, CollectionPage), automatically generated `sitemap.xml`, `robots.txt`, and `rss.xml`.
+- **WebGL Interactive Hero**: Embedded interactive 3D hero canvas built with **Three.js** featuring real-time light interactions and particle grids.
+- **Markdown Chronicles & Dossiers**: Built-in markdown parser using `Marked` and `gray-matter` for technical articles, TOC navigation, and project case studies.
+- **Interactive Pagination & Filtering**: Category and tag filters with client-side pagination across project and blog listings.
+- **Dark / Light Mode**: Seamless theme switching using `next-themes`.
 
 ---
 
