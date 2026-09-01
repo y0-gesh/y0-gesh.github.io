@@ -13,7 +13,7 @@ tags:
   - Web Development
 
 featured: false
-readTime: 8 min read
+readTime: "8 min read"
 category: "Development"
 ---
 

@@ -13,7 +13,7 @@ tags:
   - CI/CD
 
 featured: false
-readTime: 10 min read
+readTime: "10 min read"
 category: "Development"
 ---
 
