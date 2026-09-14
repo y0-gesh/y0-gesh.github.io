@@ -1,6 +1,6 @@
 ---
-title: Add "Open in Antigravity IDE" to Finder on macOS
-description: Learn how to add an "Open in Antigravity IDE" option to the Finder context menu using Automator.
+title: 'Add "Open in Antigravity IDE" to Finder on macOS'
+description: 'Learn how to add an "Open in Antigravity IDE" option to the Finder context menu using Automator.'
 date: "2026-08-01"
 tags:
   - macOS

@@ -8,6 +8,22 @@
     <atom:link href="https://yogeshtandan.in/rss.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title><![CDATA[Implementing Real-Time Voice Search in Modern Web and Mobile Apps]]></title>
+      <link>https://yogeshtandan.in/blog/voice-search-guide</link>
+      <guid isPermaLink="true">https://yogeshtandan.in/blog/voice-search-guide</guid>
+      <pubDate>Wed, 02 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A comprehensive guide to implementing real-time Voice Search across React, Next.js, and React Native (Expo) using the native Web Speech API, custom hooks, and mobile speech modules.]]></description>
+      <category>Web Development</category>
+    </item>
+    <item>
+      <title><![CDATA[Software Licensing Architecture: Designing a Yearly Single-User Model]]></title>
+      <link>https://yogeshtandan.in/blog/software-licensing-guide</link>
+      <guid isPermaLink="true">https://yogeshtandan.in/blog/software-licensing-guide</guid>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A complete architectural blueprint for designing and implementing a robust yearly single-user software licensing system with hardware identification, offline grace periods, and secure device migration.]]></description>
+      <category>System Design</category>
+    </item>
+    <item>
       <title><![CDATA[Publishing a React Native Application to the Google Play Store]]></title>
       <link>https://yogeshtandan.in/blog/react-native-google-play-store-publishing-guide</link>
       <guid isPermaLink="true">https://yogeshtandan.in/blog/react-native-google-play-store-publishing-guide</guid>

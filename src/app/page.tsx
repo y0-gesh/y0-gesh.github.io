@@ -285,7 +285,10 @@ export default function HomePage() {
                     {proj.slug === 'cicd-infrastructure-automation' && (
                       <img src="/images/devops-journey.png" alt={proj.title} className="absolute inset-0 w-full h-full object-cover" />
                     )}
-                    {!['think-canvas', 'node-editor-flow', 'cicd-infrastructure-automation'].includes(proj.slug) && (
+                    {proj.slug === 'chrono-nutrition' && (
+                      <img src="/images/chrono-nutrition.png" alt={proj.title} className="absolute inset-0 w-full h-full object-cover" />
+                    )}
+                    {!['think-canvas', 'node-editor-flow', 'cicd-infrastructure-automation', 'chrono-nutrition'].includes(proj.slug) && (
                       <span className="font-comic-title text-lg text-muted-foreground z-10 text-center px-2">
                         {proj.title}
                       </span>
