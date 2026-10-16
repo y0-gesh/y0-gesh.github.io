@@ -74,7 +74,7 @@ export function Footer() {
               className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"
               aria-hidden="true"
             />
-            <span>MISSION LOG UPDATED: 02 SEP 2026</span>
+            <span>MISSION LOG UPDATED: 16 OCT 2026</span>
           </div>
         </div>
 
